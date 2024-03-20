@@ -11,6 +11,7 @@ import customerRoutes from './views/customers/CustomerRoutes';
 import productRoutes from './views/product/ProductRoutes';
 import serviceRoutes from './views/service/ServiceRoutes';
 import iplDashboardRoutes from './views/iplDashboard/IplDashboardRoutes';
+import bidHistoryRoutes from './views/bidHistory/BidHistoryRouts';
 
 const routes = [
   {
@@ -19,7 +20,7 @@ const routes = [
         <MatxLayout />
       </AuthGuard>
     ),
-    children: [...dashboardRoutes, ...chartsRoute, ...materialRoutes, ...employeeRoutes, ...customerRoutes, ...productRoutes, ...serviceRoutes, ...iplDashboardRoutes],
+    children: [...dashboardRoutes, ...chartsRoute, ...materialRoutes, ...employeeRoutes, ...customerRoutes, ...productRoutes, ...serviceRoutes, ...iplDashboardRoutes, ...bidHistoryRoutes],
   },
   ...sessionRoutes,
   { path: '/', element: <Navigate to="iplDashboard/default" /> },

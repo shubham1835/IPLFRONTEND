@@ -1,4 +1,4 @@
-import { Box, Button, Card, Grid, styled, Radio, RadioGroup, Input } from '@mui/material';
+import { Box, Button, Card, Grid, styled, Radio, RadioGroup, Input, CircularProgress } from '@mui/material';
 import { Small, H6 } from 'app/components/Typography';
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
@@ -7,9 +7,12 @@ import DialogTitle from '@mui/material/DialogTitle'
 import React, { useEffect } from 'react'
 import FormControlLabel from "@mui/material/FormControlLabel";
 import useAuth from 'app/hooks/useAuth';
+import { makeStyles } from '@mui/styles'
 import { makeBid } from 'app/redux/actions/BidAction';
 import { useDispatch, useSelector } from 'react-redux';
 import { getMatches } from 'app/redux/actions/IplAction';
+import ViewBid from './ViewBid';
+
 const StyledCard = styled(Card)(({ theme }) => ({
   display: 'flex',
   flexWrap: 'wrap',
@@ -19,6 +22,16 @@ const StyledCard = styled(Card)(({ theme }) => ({
   background: theme.palette.background.paper,
   [theme.breakpoints.down('sm')]: { padding: '16px !important' },
 }));
+
+const useStyles = makeStyles(({ palette, ...theme }) => ({
+  buttonProgress: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
+  },
+}))
 
 const ContentBox = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -35,14 +48,42 @@ const Heading = styled('h6')(({ theme }) => ({
   color: theme.palette.primary.main,
 }));
 
+const StyledButton = styled(Button)(({ theme }) => ({
+  margin: '8px',
+  paddingLeft: '24px',
+  paddingRight: '24px',
+  overflow: 'hidden',
+  borderRadius: '300px',
+  transition: 'all 250ms',
+  '&.yesBtn': {
+    '&:hover': {
+      color: '#ffffff',
+      background: `${theme.palette.primary.main} !important`,
+      backgroundColor: `${theme.palette.primary.main} !important`,
+      fallbacks: [{ color: 'white !important' }],
+    },
+  },
+  '&.noBtn': {
+    '&:hover': {
+      color: '#ffffff',
+      background: `${theme.palette.secondary.main} !important`,
+      backgroundColor: `${theme.palette.secondary.main} !important`,
+      fallbacks: [{ color: 'white !important' }],
+    },
+  },
+}));
+
 const StatCards = () => {
   const [open, setOpen] = React.useState(false);
+  const [bidViewOpen, setBidViewOpen] = React.useState(false);
   const [dialogItem, setDialogItem] = React.useState({});
   const [value, setValue] = React.useState("");
   const [inputValue, setInputValue] = React.useState(30);
   const [bidResponse, setBidResponse] = React.useState("");
   const { logout, user } = useAuth();
+  const [loading, setLoading] = React.useState(false)
   const dispatch = useDispatch();
+  const classes = useStyles()
   const handleInputChange = (event) => {
     setInputValue(event.target.value === "" ? "" : Number(event.target.value));
   };
@@ -71,13 +112,17 @@ const StatCards = () => {
     const date = new Date();
     const lastBidTime = new Date(dialogItem.lastBidTime);
     if (inputValue && value) {
+      setLoading(true)
       const bidRequest = { bidTime: new Date(), bidAmount: inputValue, matchId: dialogItem.matchId, bidTeam: value, user: user.userName };
       const response = await makeBid(bidRequest);
-      console.log('[response]', JSON.stringify(response.data));
+      console.log('[response]', JSON.stringify(response));
+      if (response.status == 200) {
+        setLoading(false)
+        setOpen(false)
+      }
       if (response.data.statusCode != 200) {
         setBidResponse(response.data.message);
-      } else {
-        setOpen(false)
+        setLoading(false)
       }
     }
   }
@@ -88,6 +133,13 @@ const StatCards = () => {
   const handleBidOpen = (item) => {
     setDialogItem(item)
     handleClickOpen();
+  }
+  const handleViewBidClose = () => {
+    setBidViewOpen(false)
+  }
+  const handleViewBidOpen = (item) => {
+    setDialogItem(item)
+    setBidViewOpen(true)
   }
 
   function handleChange(event) {
@@ -105,15 +157,24 @@ const StatCards = () => {
                 <H6>{item.match}</H6>
                 <Heading>Match Time: {formatDate(item.date)}</Heading>
                 <Heading>Last Bid Time: {formatDate(item.lastBidTime)}</Heading>
-                <Button onClick={() => handleBidOpen(item)} variant="contained">Bid</Button>
+                <StyledButton onClick={() => handleBidOpen(item)} className="yesBtn" variant="outlined" color="primary">
+                  Bid
+                </StyledButton>
+                <StyledButton onClick={() => handleViewBidOpen(item)} className="yesBtn" variant="outlined" color="primary">
+                  View Bid
+                </StyledButton>
               </Box>
             </ContentBox>
           </StyledCard>
         </Grid>
       ))}
+      <ViewBid
+        open={bidViewOpen}
+        handleDialogClose={handleViewBidClose}
+      ></ViewBid>
       <Dialog
         open={open}
-        onClose={handleClose}
+        onClose={handleDialogClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -151,7 +212,15 @@ const StatCards = () => {
           <Button variant="contained" onClick={handleDialogClose} color="primary">
             Close
           </Button>
-          <Button variant="contained" onClick={handleClose} color="primary">
+          <Button variant="contained" disabled={loading} onClick={handleClose} color="primary">
+            {loading && (
+              <CircularProgress
+                size={24}
+                className={
+                  classes.buttonProgress
+                }
+              />
+            )}
             BID
           </Button>
         </DialogActions>
