@@ -12,12 +12,12 @@ const App = () => {
 
   return (
     <Provider store={Store}>
-      {/* <SettingsProvider> */}
-      <MatxTheme>
-        <GlobalCss />
-        <AuthProvider>{content}</AuthProvider>
-      </MatxTheme>
-      {/* </SettingsProvider> */}
+      <SettingsProvider>
+        <MatxTheme>
+          <GlobalCss />
+          <AuthProvider>{content}</AuthProvider>
+        </MatxTheme>
+      </SettingsProvider>
     </Provider>
   );
 };
