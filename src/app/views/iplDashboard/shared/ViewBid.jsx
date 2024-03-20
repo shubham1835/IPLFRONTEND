@@ -1,13 +1,12 @@
 import { Box, Button, Card, Grid, styled, Radio, RadioGroup, Input, CircularProgress } from '@mui/material';
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
 import TopSellingTable from './TopSellingTable';
 
-const ViewBid = ({ open, handleDialogClose }) => {
+const ViewBid = ({ open, handleDialogClose, matchId }) => {
 
 
     return (
@@ -21,7 +20,7 @@ const ViewBid = ({ open, handleDialogClose }) => {
                 {"Bid"}
             </DialogTitle>
             <DialogContent>
-                <TopSellingTable></TopSellingTable>
+                <TopSellingTable matchId={matchId}></TopSellingTable>
             </DialogContent>
             <DialogActions>
                 <Button variant="contained" onClick={handleDialogClose} color="primary">

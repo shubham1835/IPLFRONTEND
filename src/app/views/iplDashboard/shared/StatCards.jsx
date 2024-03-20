@@ -108,10 +108,14 @@ const StatCards = () => {
   function handleClickOpen() {
     setOpen(true)
   }
-  const handleClose = async () => {
+  const bidTimeCheck = (item) => {
     const date = new Date();
-    const lastBidTime = new Date(dialogItem.lastBidTime);
-    if (inputValue && value) {
+    const lastBidTime = new Date(item.lastBidTime);
+    return date < new Date(lastBidTime);
+  }
+
+  const handleClose = async () => {
+    if (inputValue && value && bidTimeCheck(dialogItem)) {
       setLoading(true)
       const bidRequest = { bidTime: new Date(), bidAmount: inputValue, matchId: dialogItem.matchId, bidTeam: value, user: user.userName };
       const response = await makeBid(bidRequest);
@@ -160,9 +164,9 @@ const StatCards = () => {
                 <StyledButton onClick={() => handleBidOpen(item)} className="yesBtn" variant="outlined" color="primary">
                   Bid
                 </StyledButton>
-                <StyledButton onClick={() => handleViewBidOpen(item)} className="yesBtn" variant="outlined" color="primary">
+                {!bidTimeCheck(item) && <StyledButton onClick={() => handleViewBidOpen(item)} className="yesBtn" variant="outlined" color="primary">
                   View Bid
-                </StyledButton>
+                </StyledButton>}
               </Box>
             </ContentBox>
           </StyledCard>
@@ -171,6 +175,7 @@ const StatCards = () => {
       <ViewBid
         open={bidViewOpen}
         handleDialogClose={handleViewBidClose}
+        matchId={dialogItem.matchId}
       ></ViewBid>
       <Dialog
         open={open}

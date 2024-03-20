@@ -15,6 +15,9 @@ import {
   useTheme,
 } from '@mui/material';
 import { Paragraph } from 'app/components/Typography';
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { getMatchBid } from 'app/redux/actions/BidAction';
 
 const CardHeader = styled(Box)(() => ({
   display: 'flex',
@@ -55,12 +58,16 @@ const Small = styled('small')(({ bgcolor }) => ({
   boxShadow: '0 0 2px 0 rgba(0, 0, 0, 0.12), 0 2px 2px 0 rgba(0, 0, 0, 0.24)',
 }));
 
-const TopSellingTable = () => {
+const TopSellingTable = ({ matchId }) => {
   const { palette } = useTheme();
+  const dispatch = useDispatch();
   const bgError = palette.error.main;
   const bgPrimary = palette.primary.main;
   const bgSecondary = palette.secondary.main;
-
+  useEffect(() => {
+    dispatch(getMatchBid(matchId))
+  }, []);
+  const matchBidList = useSelector((state) => state.bidReducer.matchBids);
   return (
     <Card elevation={3} sx={{ pt: '20px', mb: 3 }}>
       <CardHeader>
@@ -84,20 +91,20 @@ const TopSellingTable = () => {
           </TableHead>
 
           <TableBody>
-            {productList.map((product, index) => (
+            {matchBidList && matchBidList.map((product, index) => (
               <TableRow key={index} hover>
                 <TableCell colSpan={6} align="left" sx={{ px: 0, textTransform: 'capitalize' }}>
                   <Box display="flex" alignItems="center">
-                    <Paragraph sx={{ m: 0, ml: 4 }}>{product.name}</Paragraph>
+                    <Paragraph sx={{ m: 0, ml: 4 }}>{product.user}</Paragraph>
                   </Box>
                 </TableCell>
 
                 <TableCell align="left" colSpan={3} sx={{ px: 0, textTransform: 'capitalize' }}>
-                  {product.fav}
+                  {product.bidAmount}
                 </TableCell>
 
                 <TableCell sx={{ px: 0 }} align="left" colSpan={3}>
-                  {product.price}
+                  {product.finalAmount}
                 </TableCell>
               </TableRow>
             ))}
@@ -108,37 +115,5 @@ const TopSellingTable = () => {
   );
 };
 
-const productList = [
-  {
-    imgUrl: '/assets/images/products/headphone-2.jpg',
-    name: 'LSG VS DC',
-    fav: 'LSG',
-    price: 40
-  },
-  {
-    imgUrl: '/assets/images/products/headphone-3.jpg',
-    name: 'RCB VS CSK',
-    fav: 'CSK',
-    price: 50
-  },
-  {
-    imgUrl: '/assets/images/products/iphone-2.jpg',
-    name: 'RR VS CSK',
-    fav: 'CSK',
-    price: 60
-  },
-  {
-    imgUrl: '/assets/images/products/iphone-1.jpg',
-    name: 'RR VS RCB',
-    fav: 'RR',
-    price: 100
-  },
-  {
-    imgUrl: '/assets/images/products/headphone-3.jpg',
-    name: 'RR VS GS',
-    fav: 'GS',
-    price: 77
-  },
-];
 
 export default TopSellingTable;
