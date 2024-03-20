@@ -14,5 +14,5 @@
 //     domain: 'matx.us.auth0.com',
 // }
 
-export const SERVER_URI = 'https://middleware-2114596519:9090/ipl';
+export const SERVER_URI = 'https://merchant-middleware-1-0-2.onrender.com';
 // export const SERVER_URI = 'http://127.0.0.1:8083';
