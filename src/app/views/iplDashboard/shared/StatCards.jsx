@@ -139,7 +139,7 @@ const StatCards = () => {
       console.log('[response]', JSON.stringify(response));
       if (response.status == 200) {
         setLoading(false)
-        setOpen(false)
+        setResultOpen(false)
       }
       if (response.data.statusCode != 200) {
         setBidResponse(response.data.message);
