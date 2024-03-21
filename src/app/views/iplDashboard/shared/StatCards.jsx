@@ -8,7 +8,7 @@ import React, { useEffect } from 'react'
 import FormControlLabel from "@mui/material/FormControlLabel";
 import useAuth from 'app/hooks/useAuth';
 import { makeStyles } from '@mui/styles'
-import { makeBid } from 'app/redux/actions/BidAction';
+import { makeBid, callResult } from 'app/redux/actions/BidAction';
 import { useDispatch, useSelector } from 'react-redux';
 import { getMatches } from 'app/redux/actions/IplAction';
 import ViewBid from './ViewBid';
@@ -75,6 +75,7 @@ const StyledButton = styled(Button)(({ theme }) => ({
 
 const StatCards = () => {
   const [open, setOpen] = React.useState(false);
+  const [resultOpen, setResultOpen] = React.useState(false);
   const [bidViewOpen, setBidViewOpen] = React.useState(false);
   const [dialogItem, setDialogItem] = React.useState({});
   const [value, setValue] = React.useState("");
@@ -88,7 +89,7 @@ const StatCards = () => {
     setInputValue(event.target.value === "" ? "" : Number(event.target.value));
   };
   useEffect(() => {
-    console.log('[useEffect called]');
+    console.log('[user called]', user);
     dispatch(getMatches())
   }, []);
   const handleBlur = () => {
@@ -131,8 +132,27 @@ const StatCards = () => {
     }
   }
 
+  const handleResultClose = async () => {
+    if (value && bidTimeCheck(dialogItem)) {
+      setLoading(true)
+      const response = await callResult(dialogItem.matchId, value);
+      console.log('[response]', JSON.stringify(response));
+      if (response.status == 200) {
+        setLoading(false)
+        setOpen(false)
+      }
+      if (response.data.statusCode != 200) {
+        setBidResponse(response.data.message);
+        setLoading(false)
+      }
+    }
+  }
+
   const handleDialogClose = () => {
     setOpen(false)
+  }
+  const handleResultDialogClose = () => {
+    setResultOpen(false)
   }
   const handleBidOpen = (item) => {
     setDialogItem(item)
@@ -144,6 +164,11 @@ const StatCards = () => {
   const handleViewBidOpen = (item) => {
     setDialogItem(item)
     setBidViewOpen(true)
+  }
+
+  const handleResultOpen = (item) => {
+    setDialogItem(item)
+    setResultOpen(true)
   }
 
   function handleChange(event) {
@@ -166,6 +191,9 @@ const StatCards = () => {
                 </StyledButton>
                 {!bidTimeCheck(item) && <StyledButton onClick={() => handleViewBidOpen(item)} className="yesBtn" variant="outlined" color="primary">
                   View Bid
+                </StyledButton>}
+                {user.role == 'SA' && <StyledButton onClick={() => handleResultOpen(item)} className="yesBtn" variant="outlined" color="primary">
+                  Trigger Result
                 </StyledButton>}
               </Box>
             </ContentBox>
@@ -227,6 +255,46 @@ const StatCards = () => {
               />
             )}
             BID
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={resultOpen}
+        onClose={handleResultDialogClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Result"}
+        </DialogTitle>
+        <DialogContent>
+          <RadioGroup row
+            value={value}
+            name="match"
+            className="group"
+            aria-label="Match"
+            onChange={handleChange}
+          >
+            <FormControlLabel value={dialogItem.homeTeam} control={<Radio />} label={dialogItem.homeTeam} />
+            <FormControlLabel value={dialogItem.opponentTeam} control={<Radio />} label={dialogItem.opponentTeam} />
+          </RadioGroup>
+          <Small>{bidResponse}</Small>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" onClick={handleDialogClose} color="primary">
+            Close
+          </Button>
+          <Button variant="contained" disabled={loading} onClick={handleResultClose} color="primary">
+            {loading && (
+              <CircularProgress
+                size={24}
+                className={
+                  classes.buttonProgress
+                }
+              />
+            )}
+            Submit
           </Button>
         </DialogActions>
       </Dialog>

@@ -14,6 +14,15 @@ export const makeBid = async (payload) => {
         .catch(err => { return err.response })
 }
 
+export const callResult = async (matchId, winner) => {
+    console.log('[winner]', winner);
+    let accessToken = window.localStorage.getItem("accessToken");
+    let apiRes;
+    return await axios.post(SERVER_URI + `/app/v1/ipl/result/${matchId}/${winner}`, {}, { headers: { "Authorization": "Bearer " + accessToken } })
+        .then(res => { return res })
+        .catch(err => { return err.response })
+}
+
 export const getBidList = (user) => (dispatch) => {
     let accessToken = window.localStorage.getItem("accessToken");
     axios.get(`${SERVER_URI}/app/v1/ipl/bid/${user}`, { headers: { "Authorization": "Bearer " + accessToken } }).then((res) => {
