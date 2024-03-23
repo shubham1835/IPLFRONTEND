@@ -133,7 +133,7 @@ const StatCards = () => {
   }
 
   const handleResultClose = async () => {
-    if (value && bidTimeCheck(dialogItem)) {
+    if (value) {
       setLoading(true)
       const response = await callResult(dialogItem.matchId, value);
       console.log('[response]', JSON.stringify(response));
