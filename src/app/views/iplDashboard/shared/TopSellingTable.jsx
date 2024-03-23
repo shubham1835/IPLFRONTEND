@@ -82,6 +82,9 @@ const TopSellingTable = ({ matchId }) => {
                 User
               </TableCell>
               <TableCell sx={{ px: 0 }} colSpan={3}>
+                Bid Team
+              </TableCell>
+              <TableCell sx={{ px: 0 }} colSpan={3}>
                 Bid
               </TableCell>
               <TableCell sx={{ px: 0 }} colSpan={3}>
@@ -97,6 +100,10 @@ const TopSellingTable = ({ matchId }) => {
                   <Box display="flex" alignItems="center">
                     <Paragraph sx={{ m: 0, ml: 4 }}>{product.user}</Paragraph>
                   </Box>
+                </TableCell>
+
+                <TableCell align="left" colSpan={3} sx={{ px: 0, textTransform: 'capitalize' }}>
+                  {product.bidTeam}
                 </TableCell>
 
                 <TableCell align="left" colSpan={3} sx={{ px: 0, textTransform: 'capitalize' }}>
