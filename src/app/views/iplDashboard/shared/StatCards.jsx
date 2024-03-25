@@ -116,6 +116,9 @@ const StatCards = () => {
   }
 
   const handleClose = async () => {
+    if(value != dialogItem.homeTeam || value !=dialogItem.opponentTeam){
+      return;
+    }
     if (inputValue && value && bidTimeCheck(dialogItem)) {
       setLoading(true)
       const bidRequest = { bidTime: new Date(), bidAmount: inputValue, matchId: dialogItem.matchId, bidTeam: value, user: user.userName };
