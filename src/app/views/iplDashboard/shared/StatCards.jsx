@@ -118,7 +118,7 @@ const StatCards = () => {
   const viewBidCheck = (item) => {
     const date = new Date();
     const lastBidTime = new Date(item.lastBidTime);
-    lastBidTime.setHours(lastBidTime.getHours() - 1)
+    lastBidTime.setHours(lastBidTime.getHours() - 2)
     return date < lastBidTime;
   }
 
