@@ -15,7 +15,7 @@ export const navigations = [
     },
     {
         name: 'My Stats',
-        path: '/statistics',
+        path: '/aggregate',
         icon: 'equalizer',
         auth: authRoles.admin
     }

@@ -3,6 +3,7 @@ import { SERVER_URI } from "config"
 export const BID_DATA = 'BID_DATA'
 export const USER_BID_DATA = 'USER_BID_DATA'
 export const MATCH_BID_DATA = 'MATCH_BID_DATA'
+export const AGGREGATE_BID_DATA = 'AGGREGATE_BID_DATA'
 
 
 export const makeBid = async (payload) => {
@@ -38,6 +39,16 @@ export const getMatchBid = (match) => (dispatch) => {
     axios.get(`${SERVER_URI}/app/v1/ipl/bid/match/${match}`, { headers: { "Authorization": "Bearer " + accessToken } }).then((res) => {
         dispatch({
             type: MATCH_BID_DATA,
+            payload: res.data,
+        })
+    })
+}
+
+export const getAggregate = () => (dispatch) => {
+    let accessToken = window.localStorage.getItem("accessToken");
+    axios.get(`${SERVER_URI}/app/v1/ipl/bid`, { headers: { "Authorization": "Bearer " + accessToken } }).then((res) => {
+        dispatch({
+            type: AGGREGATE_BID_DATA,
             payload: res.data,
         })
     })

@@ -112,10 +112,24 @@ const StatCards = () => {
   const bidTimeCheck = (item) => {
     const date = new Date();
     const lastBidTime = new Date(item.lastBidTime);
-    return date < new Date(lastBidTime);
+    return date < lastBidTime;
+  }
+
+  const viewBidCheck = (item) => {
+    const date = new Date();
+    const lastBidTime = new Date(item.lastBidTime);
+    lastBidTime.setHours(lastBidTime.getHours() - 1)
+    return date < lastBidTime;
   }
 
   const handleClose = async () => {
+    if (value != dialogItem.homeTeam) {
+      if (value != dialogItem.opponentTeam) {
+        setBidResponse("Please select valid team");
+        return;
+      }
+
+    }
     if (inputValue && value && bidTimeCheck(dialogItem)) {
       setLoading(true)
       const bidRequest = { bidTime: new Date(), bidAmount: inputValue, matchId: dialogItem.matchId, bidTeam: value, user: user.userName };
@@ -189,7 +203,7 @@ const StatCards = () => {
                 <StyledButton onClick={() => handleBidOpen(item)} className="yesBtn" variant="outlined" color="primary">
                   Bid
                 </StyledButton>
-                {!bidTimeCheck(item) && <StyledButton onClick={() => handleViewBidOpen(item)} className="yesBtn" variant="outlined" color="primary">
+                {!viewBidCheck(item) && <StyledButton onClick={() => handleViewBidOpen(item)} className="yesBtn" variant="outlined" color="primary">
                   View Bid
                 </StyledButton>}
                 {user.role == 'SA' && <StyledButton onClick={() => handleResultOpen(item)} className="yesBtn" variant="outlined" color="primary">

@@ -1,4 +1,4 @@
-import { BID_DATA, USER_BID_DATA, MATCH_BID_DATA } from "../actions/BidAction"
+import { BID_DATA, USER_BID_DATA, MATCH_BID_DATA, AGGREGATE_BID_DATA } from "../actions/BidAction"
 
 const initialState = {
     states: {},
@@ -22,6 +22,12 @@ const BidReducer = function (state = initialState, action) {
             return {
                 ...state,
                 matchBids: action.payload,
+            }
+        }
+        case AGGREGATE_BID_DATA: {
+            return {
+                ...state,
+                aggregateBids: action.payload,
             }
         }
         default: {
