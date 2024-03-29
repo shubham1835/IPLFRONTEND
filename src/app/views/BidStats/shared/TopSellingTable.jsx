@@ -104,11 +104,11 @@ const TopSellingTable = () => {
                 </TableCell>
 
                 <TableCell align="left" colSpan={2} sx={{ px: 0, textTransform: 'capitalize' }}>
-                  {product.bidAmount}
+                  {product.bidAmount.toFixed(2)}
                 </TableCell>
 
                 <TableCell sx={{ px: 0 }} align="left" colSpan={2}>
-                  {product.finalAmount}
+                  {product.finalAmount.toFixed(2)}
                 </TableCell>
               </TableRow>
             ))}

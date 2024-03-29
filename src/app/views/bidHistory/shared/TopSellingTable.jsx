@@ -113,11 +113,11 @@ const TopSellingTable = () => {
                 </TableCell>
 
                 <TableCell sx={{ px: 0 }} align="left" colSpan={2}>
-                  {product.bidAmount}
+                  {product.bidAmount.toFixed(2)}
                 </TableCell>
 
                 <TableCell align="left" colSpan={2} sx={{ px: 0, textTransform: 'capitalize' }}>
-                  {product.finalAmount}
+                  {product.finalAmount.toFixed(2)}
                 </TableCell>
               </TableRow>
             ))}
@@ -127,43 +127,5 @@ const TopSellingTable = () => {
     </Card>
   );
 };
-
-const productList = [
-  {
-    imgUrl: '/assets/images/products/headphone-2.jpg',
-    name: 'LSG VS DC',
-    fav: 'LSG',
-    price: 40,
-    available: 'Win',
-  },
-  {
-    imgUrl: '/assets/images/products/headphone-3.jpg',
-    name: 'RCB VS CSK',
-    fav: 'CSK',
-    price: 50,
-    available: 'Win',
-  },
-  {
-    imgUrl: '/assets/images/products/iphone-2.jpg',
-    name: 'RR VS CSK',
-    fav: 'CSK',
-    price: 60,
-    available: 'Win',
-  },
-  {
-    imgUrl: '/assets/images/products/iphone-1.jpg',
-    name: 'RR VS RCB',
-    fav: 'RR',
-    price: 100,
-    available: 'Win',
-  },
-  {
-    imgUrl: '/assets/images/products/headphone-3.jpg',
-    name: 'RR VS GS',
-    fav: 'GS',
-    price: 77,
-    available: 'Win',
-  },
-];
 
 export default TopSellingTable;
