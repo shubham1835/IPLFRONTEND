@@ -7,6 +7,12 @@ const FlexBox = styled(Box)(() => ({
   alignItems: 'center',
 }));
 
+const Image = styled('img')(() => ({
+  display: 'block',
+  margin: '0 auto',
+  width: '700px',
+}));
+
 const JustifyBox = styled(FlexBox)(() => ({
   justifyContent: 'center',
 }));
@@ -40,7 +46,7 @@ const ForgotPassword = () => {
         <Grid container>
           <Grid item xs={12}>
             <JustifyBox p={4}>
-              <img width="300" src="/assets/images/illustrations/dreamer.svg" alt="" />
+              <Image width="300" src="/assets/images/logos/Indian_Premier_League_Official_Logo.svg.png" alt="" />
             </JustifyBox>
 
             <ContentBox>

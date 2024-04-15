@@ -71,7 +71,7 @@ const JwtLogin = () => {
         <Grid container>
           <Grid item sm={6} xs={12}>
             <JustifyBox p={4} height="100%" sx={{ minWidth: 320 }}>
-              <img src="/assets/images/illustrations/dreamer.svg" width="100%" alt="" />
+              <img src="/assets/images/logos/Indian_Premier_League_Official_Logo.svg.png" width="100%" alt="" />
             </JustifyBox>
           </Grid>
 
