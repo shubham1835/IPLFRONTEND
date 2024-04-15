@@ -1,12 +1,8 @@
 import React, { useEffect } from 'react'
 import {
-  Avatar,
+  Switch,
   Box,
   Card,
-  Icon,
-  IconButton,
-  MenuItem,
-  Select,
   styled,
   Table,
   TableBody,
@@ -61,23 +57,37 @@ const Small = styled('small')(({ bgcolor }) => ({
 
 const TopSellingTable = () => {
   const dispatch = useDispatch();
-  const { palette } = useTheme();
-  const bgError = palette.error.main;
-  const bgPrimary = palette.primary.main;
-  const bgSecondary = palette.secondary.main;
+  const [bidListToBeShowed, setBidList] = React.useState([]);
+  const [checked, setChecked] = React.useState(false);
   const { user } = useAuth();
   useEffect(() => {
     dispatch(getBidList(user.userName))
   }, []);
   const bidList = useSelector((state) => state.bidReducer.userBids);
+  const result = bidList && bidList.filter((bid) => bid.finalAmount == 0);
+  useEffect(() => {
+    setBidList(result)
+  }, [bidList]);
+
+  const handleSwitchChange = (event) => {
+    if (event.target.checked)
+      setBidList(bidList)
+    else
+      setBidList(result);
+    setChecked(event.target.checked);
+  };
   return (
     <Card elevation={3} sx={{ pt: '20px', mb: 3 }}>
       <CardHeader>
         <Title>Bid History</Title>
-        <Select size="small" defaultValue="this_month">
-          <MenuItem value="this_month">This Month</MenuItem>
-          <MenuItem value="last_month">Last Month</MenuItem>
-        </Select>
+        <div>
+          Show All Matches <Switch
+            color="primary"
+            checked={checked}
+            onChange={handleSwitchChange}
+            inputProps={{ 'aria-label': 'controlled' }}
+          />
+        </div>
       </CardHeader>
 
       <Box overflow="auto">
@@ -100,7 +110,7 @@ const TopSellingTable = () => {
           </TableHead>
 
           <TableBody>
-            {bidList && bidList.map((product, index) => (
+            {bidListToBeShowed && bidListToBeShowed.map((product, index) => (
               <TableRow key={index} hover>
                 <TableCell colSpan={4} align="left" sx={{ px: 0, textTransform: 'capitalize' }}>
                   <Box display="flex" alignItems="center">
