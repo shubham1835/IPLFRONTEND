@@ -1,10 +1,11 @@
-import { Box, Button, Card, Grid, styled, Radio, RadioGroup, Input, CircularProgress, Switch } from '@mui/material';
+import { Icon, Box, Button, Card, Grid, styled, Radio, RadioGroup, Input, CircularProgress, Switch } from '@mui/material';
 import { Small, H6 } from 'app/components/Typography';
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
 import React, { useEffect } from 'react'
+import { green } from '@mui/material/colors';
 import FormControlLabel from "@mui/material/FormControlLabel";
 import useAuth from 'app/hooks/useAuth';
 import { makeStyles } from '@mui/styles'
@@ -92,7 +93,7 @@ const StatCards = () => {
   };
   useEffect(() => {
     console.log('[user called]', user);
-    dispatch(getMatches())
+    dispatch(getMatches(user.userName))
   }, []);
   const handleBlur = () => {
     if (value < 0) {
@@ -217,6 +218,7 @@ const StatCards = () => {
           <Grid item xs={12} md={6} key={index}>
             <StyledCard elevation={6}>
               <ContentBox>
+                {item.bidDone && <Icon sx={{ color: green[500] }}>check_circle</Icon>}
                 <img style={{ width: '20%', height: '20%' }} src="/assets/images/logos/Indian_Premier_League_Official_Logo.svg.png" alt="" />
                 <Box ml="12px">
                   <H6>{item.match}</H6>
