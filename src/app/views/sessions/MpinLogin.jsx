@@ -147,7 +147,7 @@ const MpinLogin = () => {
                 ))}
               </Box>
               <LoadingButton
-                style={{ position: 'absolute', left: '35%' }}
+                style={{ position: 'absolute', left: '35%', marginTop: '10%' }}
                 type="submit"
                 color="primary"
                 loading={loading}
@@ -158,6 +158,15 @@ const MpinLogin = () => {
               >
                 Verify
               </LoadingButton>
+              <Paragraph>
+                Go to Login Page
+                <NavLink
+                  to="/session/signin"
+                  style={{ color: theme.palette.primary.main, marginLeft: 5 }}
+                >
+                  Login Page
+                </NavLink>
+              </Paragraph>
             </ContentBox>
           </Grid>
         </Grid>
