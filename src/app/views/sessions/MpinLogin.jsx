@@ -132,9 +132,9 @@ const MpinLogin = () => {
                     // onPaste={handleOnPaste}
                     inputProps={{
                       maxLength: 1,
-                      style: { textAlign: 'center' },
+                      style: { textAlign: 'center', '-webkit-text-security': 'disc', },
                     }}
-                    type='password'
+                    type="tel"
                     inputMode="numeric"
                     inputRef={(ele) => inputsRef.current[i] = ele}
                     autoComplete={i === 0 ? 'one-time-code' : 'off'}

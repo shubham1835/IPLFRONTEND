@@ -141,6 +141,7 @@ const MpinRegister = () => {
                     onKeyDown={handleOnKeyDown}
                     onFocus={handleOnFocus}
                     inputMode="numeric"
+                    type="tel"
                     inputProps={{
                       maxLength: 1,
                       style: { textAlign: 'center' },
@@ -163,7 +164,7 @@ const MpinRegister = () => {
                     onChange={handleOnChange}
                     onKeyDown={handleOnKeyDown}
                     onFocus={handleOnFocus}
-                    type='password'
+                    type="tel"
                     inputMode="numeric"
                     inputProps={{
                       maxLength: 1,
