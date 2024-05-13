@@ -57,9 +57,12 @@ const JwtLogin = () => {
   const handleFormSubmit = async (values) => {
     setLoading(true);
     try {
-      await login(values.email, values.password);
-      console.log("[dashboard]");
-      navigate('/');
+      const user = await login(values.email, values.password);
+      console.log("[dashboard]", user);
+      if (user.mpinEnabled)
+        navigate('/');
+      else
+        navigate('/session/mpin-signup');
     } catch (e) {
       setLoading(false);
     }

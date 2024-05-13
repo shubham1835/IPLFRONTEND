@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux'
 import { navigations } from 'app/navigations'
 import { getNavigationByUser } from 'app/redux/actions/NavigationAction';
 import { GET_QR_DATA } from 'app/redux/actions/UserAction';
+import { NavLink, useNavigate } from 'react-router-dom';
 import history from 'history.js';
 const initialState = {
     isAuthenticated: false,
@@ -84,12 +85,14 @@ const AuthContext = createContext({
     otpLogin: () => Promise.resolve(),
     logout: () => { },
     register: () => Promise.resolve(),
+    mpinRegister: () => Promise.resolve(),
     updateMerchant: () => Promise.resolve(),
     registerEmployee: () => Promise.resolve(),
 })
 
 export const AuthProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState)
+    const navigate = useNavigate();
     const dispatcher = useDispatch();
     const login = async (userName, password) => {
         let accessToken = window.localStorage.getItem("accessToken");
@@ -114,29 +117,23 @@ export const AuthProvider = ({ children }) => {
             },
         })
         setSession(accessToken)
+        if (user.mpinEnabled)
+            window.localStorage.setItem('isMpinLoginEnabled', true)
         window.localStorage.setItem('userName', userName)
+        // window.localStorage.setItem('user', JSON.stringify(user))
         return user;
     }
-    const otpLogin = async (otp) => {
+    const mpinRegister = async (otp) => {
         let accessToken = window.localStorage.getItem("accessToken");
         let userName = window.localStorage.getItem("userName");
-        const response = await axios.post(URI + '/app/v1/employee/otpLogin', {
+        const response = await axios.post(URI + '/app/v1/employee/mPinRegister', {
             userName,
             otp,
         }, { headers: { "Authorization": "Bearer " + accessToken, "Content-Type": "application/json" } })
-        const user = response.data
-        const navigationState = {}
-        navigationState['navigations'] = navigations
-        navigationState['user'] = user
-        dispatcher(getNavigationByUser(navigationState))
-        setSession(accessToken)
-        window.localStorage.setItem('userName', userName)
-        dispatch({
-            type: 'LOGIN',
-            payload: {
-                user,
-            },
-        })
+        console.log('[mpinRegister 1]', response.status);
+        window.localStorage.setItem('isMpinLoginEnabled', true)
+        console.log('[mpinRegister]', response.status);
+        return response.status;
     }
     const register = async (body) => {
         let accessToken = window.localStorage.getItem("accessToken");
@@ -155,6 +152,29 @@ export const AuthProvider = ({ children }) => {
         //         user,
         //     },
         // })
+    }
+    const otpLogin = async (otp) => {
+        let accessToken = window.localStorage.getItem("accessToken");
+        let userName = window.localStorage.getItem("userName");
+        console.log('otp----->', otp);
+        const response = await axios.post(URI + '/app/v1/employee/mPinLogin', {
+            userName,
+            otp,
+        }, { headers: { "Authorization": "Bearer " + accessToken, "Content-Type": "application/json" } })
+        const user = response.data
+        const navigationState = {}
+        navigationState['navigations'] = navigations
+        navigationState['user'] = user
+        dispatcher(getNavigationByUser(navigationState))
+        setSession(accessToken)
+        window.localStorage.setItem('userName', userName)
+        dispatch({
+            type: 'LOGIN',
+            payload: {
+                user,
+            },
+        })
+        return user;
     }
     const updateMerchant = async (body) => {
         let accessToken = window.localStorage.getItem("accessToken");
@@ -198,9 +218,10 @@ export const AuthProvider = ({ children }) => {
     }
 
     const logout = () => {
+        window.localStorage.clear();
         setSession(null)
         dispatch({ type: 'LOGOUT' })
-        history.push('/session/login')
+        // history.push('/session/login')
     }
 
     useEffect(() => {
@@ -208,9 +229,11 @@ export const AuthProvider = ({ children }) => {
             try {
                 const accessToken = window.localStorage.getItem('accessToken')
                 let userName = window.localStorage.getItem("userName");
+                // let user = window.localStorage.getItem("user");
                 if (accessToken && isValidToken(accessToken) && userName) {
-                    console.log('[reload]' + accessToken)
-                    history.push('/session/otp-login')
+                    console.log('[reload]')
+                    navigate('/session/otp-login');
+                    // history.push('/session/otp-login')
                     // setSession(accessToken)
                     // const response = await axios.get('/api/auth/profile')
                     // const { user } = response.data
@@ -257,7 +280,8 @@ export const AuthProvider = ({ children }) => {
                 logout,
                 register,
                 updateMerchant,
-                registerEmployee
+                registerEmployee,
+                mpinRegister
             }}
         >
             {children}

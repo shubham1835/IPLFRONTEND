@@ -31,13 +31,17 @@ const AuthGuard = ({ children }) => {
   // // AND COMMENT OUT BELOW authenticated VARIABLE
 
   let authenticated = isAuthenticated;
-
+  const navigate = () => {
+    if (window.localStorage.getItem('isMpinLoginEnabled'))
+      return <Navigate replace to="/session/otp-login" state={{ from: pathname }} />
+    else return <Navigate replace to="/session/signin" state={{ from: pathname }} />
+  }
   return (
     <>
       {authenticated ? (
         children
       ) : (
-        <Navigate replace to="/session/signin" state={{ from: pathname }} />
+        navigate()
       )}
     </>
   );
