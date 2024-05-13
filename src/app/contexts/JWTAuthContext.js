@@ -155,6 +155,9 @@ export const AuthProvider = ({ children }) => {
     }
     const otpLogin = async (otp) => {
         let accessToken = window.localStorage.getItem("accessToken");
+        if (!isValidToken(accessToken)) {
+            accessToken = await getAuthToken();
+        }
         let userName = window.localStorage.getItem("userName");
         console.log('otp----->', otp);
         const response = await axios.post(URI + '/app/v1/employee/mPinLogin', {
