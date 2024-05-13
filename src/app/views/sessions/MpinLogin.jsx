@@ -135,6 +135,7 @@ const MpinLogin = () => {
                       style: { textAlign: 'center' },
                     }}
                     type='password'
+                    inputMode="numeric"
                     inputRef={(ele) => inputsRef.current[i] = ele}
                     autoComplete={i === 0 ? 'one-time-code' : 'off'}
                     sx={{
