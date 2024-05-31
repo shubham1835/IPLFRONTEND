@@ -20,6 +20,18 @@ export const navigations = [
         auth: authRoles.editor
     },
     {
+        name: 'Create Subscription',
+        path: '/createSubscription',
+        icon: 'subscriptions',
+        auth: authRoles.admin
+    },
+    {
+        name: 'Add User',
+        path: '/addUser',
+        icon: 'personAdd',
+        auth: authRoles.admin
+    },
+    {
         name: 'Change Pin',
         path: '/session/mpin-signup',
         icon: 'people',
