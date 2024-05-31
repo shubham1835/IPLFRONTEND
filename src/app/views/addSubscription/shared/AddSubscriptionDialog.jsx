@@ -32,6 +32,8 @@ const AddSubscriptionDialog = ({ open, handleDialogClose, matchId }) => {
 
         if (!values.endDate) {
             errors.endDate = 'End date is required';
+        } else if (values.startDate && values.endDate < values.startDate) {
+            errors.endDate = 'End date cannot be before start date';
         }
 
         if (!values.groupStatus) {
@@ -46,10 +48,17 @@ const AddSubscriptionDialog = ({ open, handleDialogClose, matchId }) => {
     };
 
     const handleSubmit = async (values, { setSubmitting }) => {
+        const payload = {
+            groupName: values?.groupName,
+            startDate: Date.parse(values?.startDate),
+            endDate: Date.parse(values?.endDate),
+            groupStatus: values?.groupStatus,
+            groupDescription: values?.groupDescription
+        }
         setSubmitting(false);
         if (values) {
             setLoading(true)
-            const response = await addSubscription(value);
+            const response = await addSubscription(payload);
             console.log('[response]', JSON.stringify(response));
             if (response.status == 200) {
                 setLoading(false)
@@ -108,6 +117,9 @@ const AddSubscriptionDialog = ({ open, handleDialogClose, matchId }) => {
                                     label="End Date"
                                     type="date"
                                     fullWidth
+                                    InputProps={{
+                                        min: values.startDate
+                                    }}
                                     disabled={!values.startDate}
                                     InputLabelProps={{ shrink: true }}
                                     error={touched.endDate && Boolean(errors.endDate)}
