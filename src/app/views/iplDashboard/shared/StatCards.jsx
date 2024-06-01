@@ -135,7 +135,7 @@ const StatCards = () => {
     }
     if (inputValue && value && bidTimeCheck(dialogItem)) {
       setLoading(true)
-      const bidRequest = { bidTime: new Date(), bidAmount: inputValue, matchId: dialogItem.matchId, bidTeam: value, user: user.userName };
+      const bidRequest = { bidTime: Date.now(), bidAmount: inputValue, matchId: dialogItem.matchId, bidTeam: value, user: user.userName };
       const response = await makeBid(bidRequest);
       console.log('[response]', JSON.stringify(response));
       if (response.status == 200) {
