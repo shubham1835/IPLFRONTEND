@@ -9,6 +9,7 @@ import UserActionReducer from './UserActionReducer'
 import ConfigReducer from './ConfigReducer'
 import BidReducer from './BidReducer'
 import IPLReducer from './IPLReducer'
+import SubscriptionReducer from './SubscriptionReducer'
 
 const RootReducer = combineReducers({
     notifications: NotificationReducer,
@@ -20,7 +21,8 @@ const RootReducer = combineReducers({
     formActionReducer: FormActionReducer,
     userReducer: UserActionReducer,
     bidReducer: BidReducer,
-    iPLReducer: IPLReducer
+    iPLReducer: IPLReducer,
+    subscriptionReducer: SubscriptionReducer
 })
 
 export default RootReducer

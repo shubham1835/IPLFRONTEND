@@ -213,6 +213,11 @@ const StatCards = () => {
         onChange={handleSwitchChange}
         inputProps={{ 'aria-label': 'controlled' }}
       />
+      {user.role == 'SA' && <div>
+        <Button sx={{ m: 1 }} variant="contained" onClick={handleDialogClose} color="primary">
+          Create Match
+        </Button>
+      </div>}
       <Grid container spacing={3} sx={{ mb: '24px' }}>
         {matchListToBeShowed && matchListToBeShowed.map((item, index) => (
           <Grid item xs={12} md={6} key={index}>

@@ -1,4 +1,4 @@
-import { GET_MATCH_LIST } from "../actions/IplAction"
+import { GET_MATCH_LIST, GET_TEAM_LIST } from "../actions/IplAction"
 
 const initialState = {
     states: {},
@@ -10,6 +10,12 @@ const IPLReducer = function (state = initialState, action) {
             return {
                 ...state,
                 matches: action.payload,
+            }
+        }
+        case GET_TEAM_LIST: {
+            return {
+                ...state,
+                teams: action.payload,
             }
         }
         default: {
