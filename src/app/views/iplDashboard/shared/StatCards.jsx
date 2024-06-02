@@ -13,6 +13,7 @@ import { makeBid, callResult } from 'app/redux/actions/BidAction';
 import { useDispatch, useSelector } from 'react-redux';
 import { getMatches } from 'app/redux/actions/IplAction';
 import ViewBid from './ViewBid';
+import CreateMatch from './CreateMatch';
 
 const StyledCard = styled(Card)(({ theme }) => ({
   display: 'flex',
@@ -339,6 +340,10 @@ const StatCards = () => {
               )}
               Submit
             </Button>
+            <CreateMatch
+              open={bidViewOpen}
+              handleDialogClose={handleViewBidClose}
+              matchId={dialogItem.matchId}></CreateMatch>
           </DialogActions>
         </Dialog>
       </Grid>

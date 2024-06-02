@@ -9,11 +9,16 @@ import {
   TableHead,
   TableRow,
   useTheme,
+  Button
 } from '@mui/material';
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
 import { Paragraph } from 'app/components/Typography';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAggregate } from 'app/redux/actions/BidAction';
 import { MatxLoading } from 'app/components'
+import { getSubscriptions } from 'app/redux/actions/SubscriptionAction';
+import useAuth from 'app/hooks/useAuth';
 
 const ProductTable = styled(Table)(() => ({
   minWidth: 400,
@@ -31,13 +36,24 @@ const ProductTable = styled(Table)(() => ({
 const TopSellingTable = () => {
   const dispatch = useDispatch();
   const { palette } = useTheme();
+  const { user } = useAuth();
+  const subscriptions = user.subscriptions;
   useEffect(() => {
     dispatch(getAggregate())
   }, []);
   const bidList = useSelector((state) => state.bidReducer.aggregateBids);
+
+  const callAggrigateBid = (subscription) => {
+    dispatch(getAggregate(subscription))
+    console.log('subscriptions=====', subscription);
+  }
   return (
     <Card elevation={3} sx={{ pt: '20px', mb: 3 }}>
-      {!bidList && <MatxLoading></MatxLoading>}
+      <Stack sx={{ ml: 1 }} direction="row" spacing={1}>
+        {subscriptions && subscriptions.map(element => <Button size="small" onClick={() => callAggrigateBid(element)} variant="contained" >{element}</Button>
+        )}
+      </Stack>
+      {/* {!bidList && <MatxLoading></MatxLoading>} */}
       <Box overflow="auto">
         <ProductTable>
           <TableHead>

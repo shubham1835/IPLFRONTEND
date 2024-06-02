@@ -44,9 +44,9 @@ export const getMatchBid = (match) => (dispatch) => {
     })
 }
 
-export const getAggregate = () => (dispatch) => {
+export const getAggregate = (subscription) => (dispatch) => {
     let accessToken = window.localStorage.getItem("accessToken");
-    axios.get(`${SERVER_URI}/app/v1/ipl/bid`, { headers: { "Authorization": "Bearer " + accessToken } }).then((res) => {
+    axios.get(`${SERVER_URI}/app/v1/ipl/bid/subscription/${subscription}`, { headers: { "Authorization": "Bearer " + accessToken } }).then((res) => {
         dispatch({
             type: AGGREGATE_BID_DATA,
             payload: res.data,
