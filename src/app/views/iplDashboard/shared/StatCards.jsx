@@ -79,6 +79,7 @@ const StatCards = () => {
   const [open, setOpen] = React.useState(false);
   const [resultOpen, setResultOpen] = React.useState(false);
   const [bidViewOpen, setBidViewOpen] = React.useState(false);
+  const [matchViewOpen, setMatchViewOpen] = React.useState(false);
   const [dialogItem, setDialogItem] = React.useState({});
   const [value, setValue] = React.useState("");
   const [matchListToBeShowed, setMatchList] = React.useState([]);
@@ -96,6 +97,7 @@ const StatCards = () => {
     console.log('[user called]', user);
     dispatch(getMatches(user.userName))
   }, []);
+  const subscriptions = user.subscriptions;
   const handleBlur = () => {
     if (value < 0) {
       setInputValue(0);
@@ -214,8 +216,8 @@ const StatCards = () => {
         onChange={handleSwitchChange}
         inputProps={{ 'aria-label': 'controlled' }}
       />
-      {user.role == 'SA' && <div>
-        <Button sx={{ m: 1 }} variant="contained" onClick={handleDialogClose} color="primary">
+      {user.role == 'EDITOR' && <div>
+        <Button sx={{ m: 1 }} variant="contained" onClick={() => setMatchViewOpen(true)} color="primary">
           Create Match
         </Button>
       </div>}
@@ -249,104 +251,104 @@ const StatCards = () => {
           handleDialogClose={handleViewBidClose}
           matchId={dialogItem.matchId}
         ></ViewBid>
-        <Dialog
-          open={open}
-          onClose={handleDialogClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">
-            {"Bid"}
-          </DialogTitle>
-          <DialogContent>
-            <RadioGroup row
-              value={value}
-              name="match"
-              className="group"
-              aria-label="Match"
-              onChange={handleChange}
-            >
-              <FormControlLabel value={dialogItem.homeTeam} control={<Radio />} label={dialogItem.homeTeam} />
-              <FormControlLabel value={dialogItem.opponentTeam} control={<Radio />} label={dialogItem.opponentTeam} />
-            </RadioGroup>
-            <Input
-              value={inputValue}
-              margin="dense"
-              sx={{ width: '100%' }}
-              onChange={handleInputChange}
-              onBlur={handleBlur}
-              inputProps={{
-                step: 10,
-                min: 0,
-                max: 100,
-                type: "number",
-                "aria-labelledby": "input-slider",
-              }}
-            />
-            <Small>{bidResponse}</Small>
-          </DialogContent>
-          <DialogActions>
-            <Button variant="contained" onClick={handleDialogClose} color="primary">
-              Close
-            </Button>
-            <Button variant="contained" disabled={loading} onClick={handleClose} color="primary">
-              {loading && (
-                <CircularProgress
-                  size={24}
-                  className={
-                    classes.buttonProgress
-                  }
-                />
-              )}
-              BID
-            </Button>
-          </DialogActions>
-        </Dialog>
-
-        <Dialog
-          open={resultOpen}
-          onClose={handleResultDialogClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">
-            {"Result"}
-          </DialogTitle>
-          <DialogContent>
-            <RadioGroup row
-              value={value}
-              name="match"
-              className="group"
-              aria-label="Match"
-              onChange={handleChange}
-            >
-              <FormControlLabel value={dialogItem.homeTeam} control={<Radio />} label={dialogItem.homeTeam} />
-              <FormControlLabel value={dialogItem.opponentTeam} control={<Radio />} label={dialogItem.opponentTeam} />
-            </RadioGroup>
-            <Small>{bidResponse}</Small>
-          </DialogContent>
-          <DialogActions>
-            <Button variant="contained" onClick={handleDialogClose} color="primary">
-              Close
-            </Button>
-            <Button variant="contained" disabled={loading} onClick={handleResultClose} color="primary">
-              {loading && (
-                <CircularProgress
-                  size={24}
-                  className={
-                    classes.buttonProgress
-                  }
-                />
-              )}
-              Submit
-            </Button>
-            <CreateMatch
-              open={bidViewOpen}
-              handleDialogClose={handleViewBidClose}
-              matchId={dialogItem.matchId}></CreateMatch>
-          </DialogActions>
-        </Dialog>
+        <CreateMatch
+          open={matchViewOpen}
+          handleDialogClose={() => setMatchViewOpen(false)}
+          subscriptions={subscriptions}></CreateMatch>
       </Grid>
+      <Dialog
+        open={open}
+        onClose={handleDialogClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Bid"}
+        </DialogTitle>
+        <DialogContent>
+          <RadioGroup row
+            value={value}
+            name="match"
+            className="group"
+            aria-label="Match"
+            onChange={handleChange}
+          >
+            <FormControlLabel value={dialogItem.homeTeam} control={<Radio />} label={dialogItem.homeTeam} />
+            <FormControlLabel value={dialogItem.opponentTeam} control={<Radio />} label={dialogItem.opponentTeam} />
+          </RadioGroup>
+          <Input
+            value={inputValue}
+            margin="dense"
+            sx={{ width: '100%' }}
+            onChange={handleInputChange}
+            onBlur={handleBlur}
+            inputProps={{
+              step: 10,
+              min: 0,
+              max: 100,
+              type: "number",
+              "aria-labelledby": "input-slider",
+            }}
+          />
+          <Small>{bidResponse}</Small>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" onClick={handleDialogClose} color="primary">
+            Close
+          </Button>
+          <Button variant="contained" disabled={loading} onClick={handleClose} color="primary">
+            {loading && (
+              <CircularProgress
+                size={24}
+                className={
+                  classes.buttonProgress
+                }
+              />
+            )}
+            BID
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={resultOpen}
+        onClose={handleResultDialogClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Result"}
+        </DialogTitle>
+        <DialogContent>
+          <RadioGroup row
+            value={value}
+            name="match"
+            className="group"
+            aria-label="Match"
+            onChange={handleChange}
+          >
+            <FormControlLabel value={dialogItem.homeTeam} control={<Radio />} label={dialogItem.homeTeam} />
+            <FormControlLabel value={dialogItem.opponentTeam} control={<Radio />} label={dialogItem.opponentTeam} />
+          </RadioGroup>
+          <Small>{bidResponse}</Small>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" onClick={handleDialogClose} color="primary">
+            Close
+          </Button>
+          <Button variant="contained" disabled={loading} onClick={handleResultClose} color="primary">
+            {loading && (
+              <CircularProgress
+                size={24}
+                className={
+                  classes.buttonProgress
+                }
+              />
+            )}
+            Submit
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
