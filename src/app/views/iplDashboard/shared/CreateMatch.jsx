@@ -1,72 +1,93 @@
 import { Box, Button, Card, Grid, styled, Radio, RadioGroup, Input, CircularProgress, TextField, Divider, MenuItem } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { margin } from '@mui/system';
-// import { addSubscription } from 'app/redux/actions/SubscriptionAction';
+import useAuth from 'app/hooks/useAuth';
+import { getTeams, postMatches } from 'app/redux/actions/IplAction';
+import { useDispatch, useSelector } from 'react-redux';
 
 const CreateMatch = ({ open, handleDialogClose, matchId }) => {
 
     const [loading, setLoading] = React.useState(false);
     const [value, setValue] = React.useState("");
+    const { user } = useAuth();
+    const dispatch = useDispatch();
+    const [subscription, setSubscription] = React.useState("");
+    const [homeTeam, setHomeTeam] = React.useState("");
+    const [opponentTeamList, setOpponentTeamList] = React.useState("");
+
+    useEffect(() => {
+        dispatch(getTeams(subscription))
+    }, [subscription]);
+
+    useEffect(() => {
+
+        if (teamList) {
+            const oppDrpTeamList = teamList.filter(node => node != homeTeam);
+            setOpponentTeamList(oppDrpTeamList)
+        }
+    }, [homeTeam]);
 
     const initialValues = {
-        groupName: '',
-        startDate: '',
-        endDate: '',
-        groupStatus: '',
-        groupDescription: ''
+        homeTeam: '',
+        opponentTeam: '',
+        matchDate: '',
+        matchTime: '',
+        minBid: 30,
+        subscription: ''
     };
 
     const validate = values => {
         const errors = {};
 
-        if (!values.groupName) {
-            errors.groupName = 'Group name is required';
+        if (!homeTeam) {
+            errors.homeTeam = 'Home Team is required';
         }
 
-        if (!values.startDate) {
-            errors.startDate = 'Start date is required';
+        if (!values.opponentTeam) {
+            errors.opponentTeam = 'Opponent Team is required';
         }
 
-        if (!values.endDate) {
-            errors.endDate = 'End date is required';
-        } else if (values.startDate && values.endDate < values.startDate) {
-            errors.endDate = 'End date cannot be before start date';
+        if (!values.matchDate) {
+            errors.matchDate = 'Match date is required';
         }
 
-        if (!values.groupStatus) {
-            errors.groupStatus = 'Group status is required';
+        if (!values.matchTime) {
+            errors.matchTime = 'Match Time is required';
         }
 
-        if (!values.groupDescription) {
-            errors.groupDescription = 'Group description is required';
+        if (!values.minBid) {
+            errors.minBid = 'Minimum Bid is required';
+        } else if (values.minBid < 30) {
+            errors.minBid = 'Minimum Bid should be greater or equal to 30'
+        }
+
+        if (!subscription) {
+            errors.subscription = 'Subscription is required';
         }
 
         return errors;
     };
 
+    const teamList = useSelector((state) => state.iPLReducer.teams);
+
+
     const handleSubmit = async (values, { setSubmitting }) => {
+        const date = new Date(values.matchDate + ' ' + values.matchTime);
         const payload = {
-            groupName: values?.groupName,
-            startDate: Date.parse(values?.startDate),
-            endDate: Date.parse(values?.endDate),
-            groupStatus: values?.groupStatus,
-            groupDescription: values?.groupDescription
+            homeTeam: homeTeam,
+            opponentTeam: values.opponentTeam,
+            date: Date.parse(date),
+            minBid: values?.minBid,
+            subscription
         }
+        const response = await postMatches(payload);
         setSubmitting(false);
         if (values) {
             setLoading(true)
-            // const response = await addSubscription(payload);
-            // console.log('[response]', JSON.stringify(response));
-            // if (response.status == 200) {
-            //     setLoading(false)
-            // }
-            // if (response.data.statusCode != 200) {
-            //     setLoading(false)
-            // }
         }
     };
 
@@ -87,137 +108,121 @@ const CreateMatch = ({ open, handleDialogClose, matchId }) => {
                     validate={validate}
                     onSubmit={handleSubmit}
                 >
-                    {({ values, isSubmitting, errors, touched }) => (
+                    {({ values, isSubmitting, errors, touched, handleChange }) => (
                         <Form className="p-3">
-                            <Box mb={2}>
-                                <Grid container spacing={2}>
-                                    <Grid item lg={6} md={6} sm={6} xs={16}>
-                                        <Field
-                                            as={TextField}
-                                            name="groupStatus"
-                                            label="Group Status"
-                                            select
-                                            style={{ marginRight: "20px", width: '100%' }}
-                                            error={touched.groupStatus && Boolean(errors.groupStatus)}
-                                            helperText={<ErrorMessage name="groupStatus" />}
-                                        >
-                                            <MenuItem value="">
-                                                <em>Select status</em>
-                                            </MenuItem>
-                                            <MenuItem value="active">Active</MenuItem>
-                                            <MenuItem value="inactive">Inactive</MenuItem>
-                                        </Field>
-
-                                    </Grid>
-                                    <Grid item lg={6} md={6} sm={6} xs={16}>
-                                        <Field
-                                            as={TextField}
-                                            name="groupStatus"
-                                            label="Group Status"
-                                            select
-                                            fullWidth
-                                            error={touched.groupStatus && Boolean(errors.groupStatus)}
-                                            helperText={<ErrorMessage name="groupStatus" />}
-                                        >
-                                            <MenuItem value="">
-                                                <em>Select status</em>
-                                            </MenuItem>
-                                            <MenuItem value="active">Active</MenuItem>
-                                            <MenuItem value="inactive">Inactive</MenuItem>
-                                        </Field>
-                                    </Grid>
-
-                                </Grid>
-                            </Box>
-                            <Box mb={2}>
-                                <Grid container spacing={2}>
-                                    <Grid item lg={6} md={6} sm={6} xs={16}>
-                                        <Field
-                                            as={TextField}
-                                            name="startDate"
-                                            label="Start Date"
-                                            type="date"
-                                            fullWidth
-                                            style={{ marginRight: "20px" }}
-                                            InputLabelProps={{ shrink: true }}
-                                            error={touched.startDate && Boolean(errors.startDate)}
-                                            helperText={<ErrorMessage name="startDate" />}
-                                        />
-                                    </Grid>
-                                    <Grid item lg={6} md={6} sm={6} xs={16}>
-                                        <Field
-                                            as={TextField}
-                                            name="startTime"
-                                            label="Start Date"
-                                            type="time"
-                                            fullWidth
-                                            InputLabelProps={{ shrink: true }}
-                                            error={touched.startDate && Boolean(errors.startDate)}
-                                            helperText={<ErrorMessage name="startTime" />}
-                                        />
-                                    </Grid>
-                                </Grid>
-                            </Box>
-                            <Box mb={2}>
-                                <Grid container spacing={2}>
-                                    <Grid item lg={6} md={6} sm={6} xs={16}>
-                                        <Field
-                                            as={TextField}
-                                            name="endDate"
-                                            label="End Date"
-                                            type="date"
-                                            fullWidth
-                                            style={{ marginRight: "20px" }}
-                                            InputProps={{
-                                                min: values.startDate
-                                            }}
-                                            disabled={!values.startDate}
-                                            InputLabelProps={{ shrink: true }}
-                                            error={touched.endDate && Boolean(errors.endDate)}
-                                            helperText={<ErrorMessage name="endDate" />}
-                                        />
-                                    </Grid>
-                                    <Grid item lg={6} md={6} sm={6} xs={16}>
-                                        <Field
-                                            as={TextField}
-                                            name="endTime"
-                                            label="Start Date"
-                                            type="time"
-                                            fullWidth
-                                            InputLabelProps={{ shrink: true }}
-                                            error={touched.startDate && Boolean(errors.startDate)}
-                                            helperText={<ErrorMessage name="endTime" />}
-                                        />
-                                    </Grid>
-                                </Grid>
-                            </Box>
                             <Box mb={2}>
                                 <Field
                                     as={TextField}
-                                    name="groupStatus"
-                                    label="Group Status"
+                                    name="subscription"
+                                    label="Subscription"
                                     select
                                     fullWidth
-                                    error={touched.groupStatus && Boolean(errors.groupStatus)}
-                                    helperText={<ErrorMessage name="groupStatus" />}
+                                    value={subscription}
+                                    error={touched.subscription && Boolean(errors.subscription)}
+                                    helperText={<ErrorMessage name="subscription" />}
+                                    onChange={(event) => {
+                                        setSubscription(event.target.value)
+                                    }}
                                 >
                                     <MenuItem value="">
                                         <em>Select status</em>
                                     </MenuItem>
-                                    <MenuItem value="active">Active</MenuItem>
-                                    <MenuItem value="inactive">Inactive</MenuItem>
+                                    {user.subscriptions.map((item, ind) => (
+                                        <MenuItem value={item} key={item}>
+                                            {item}
+                                        </MenuItem>
+                                    ))}
                                 </Field>
+                            </Box>
+                            <Box mb={2}>
+                                <Grid container spacing={2}>
+                                    <Grid item lg={6} md={6} sm={6} xs={16}>
+                                        <Field
+                                            as={TextField}
+                                            name="homeTeam"
+                                            label="Home Team"
+                                            select
+                                            value={homeTeam}
+                                            style={{ marginRight: "20px", width: '100%' }}
+                                            error={touched.homeTeam && Boolean(errors.homeTeam)}
+                                            helperText={<ErrorMessage name="homeTeam" />}
+                                            onChange={(event, ind) => {
+                                                setHomeTeam(event.target.value)
+                                            }}
+                                        >
+                                            <MenuItem value="">
+                                                <em>Select status</em>
+                                            </MenuItem>
+                                            {teamList && teamList.map((item, ind) => (
+                                                <MenuItem value={item} key={item}>
+                                                    {item}
+                                                </MenuItem>
+                                            ))}
+                                        </Field>
+
+                                    </Grid>
+                                    <Grid item lg={6} md={6} sm={6} xs={16}>
+                                        <Field
+                                            as={TextField}
+                                            name="opponentTeam"
+                                            label="Opponent Team"
+                                            select
+                                            fullWidth
+                                            error={touched.opponentTeam && Boolean(errors.opponentTeam)}
+                                            helperText={<ErrorMessage name="opponentTeam" />}
+                                        >
+                                            <MenuItem value="">
+                                                <em>Select status</em>
+                                            </MenuItem>
+                                            {opponentTeamList && opponentTeamList.map((item, ind) => (
+                                                <MenuItem value={item} key={item}>
+                                                    {item}
+                                                </MenuItem>
+                                            ))}
+                                        </Field>
+                                    </Grid>
+
+                                </Grid>
+                            </Box>
+                            <Box mb={2}>
+                                <Grid container spacing={2}>
+                                    <Grid item lg={6} md={6} sm={6} xs={16}>
+                                        <Field
+                                            as={TextField}
+                                            name="matchDate"
+                                            label="Match Date"
+                                            type="date"
+                                            fullWidth
+                                            style={{ marginRight: "20px" }}
+                                            InputLabelProps={{ shrink: true }}
+                                            error={touched.matchDate && Boolean(errors.matchDate)}
+                                            helperText={<ErrorMessage name="matchDate" />}
+                                        />
+                                    </Grid>
+                                    <Grid item lg={6} md={6} sm={6} xs={16}>
+                                        <Field
+                                            as={TextField}
+                                            name="matchTime"
+                                            label="Match Time"
+                                            type="time"
+                                            pattern="[0-9]{2}.[0-9]{2}"
+                                            fullWidth
+                                            InputLabelProps={{ shrink: true }}
+                                            error={touched.matchTime && Boolean(errors.matchTime)}
+                                            helperText={<ErrorMessage name="matchTime" />}
+                                        />
+                                    </Grid>
+                                </Grid>
                             </Box>
                             <Box mb={2}>
                                 <Field
                                     as={TextField}
-                                    name="groupDescription"
-                                    label="Group Description"
-                                    multiline
-                                    rows={4}
+                                    name="minBid"
+                                    type="number"
+                                    label="Minium Bid Amount"
                                     fullWidth
-                                    error={touched.groupDescription && Boolean(errors.groupDescription)}
-                                    helperText={<ErrorMessage name="groupDescription" />}
+                                    error={touched.minBid && Boolean(errors.minBid)}
+                                    helperText={<ErrorMessage name="minBid" />}
                                 />
                             </Box>
                             <Box>
