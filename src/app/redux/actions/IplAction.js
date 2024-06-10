@@ -15,11 +15,10 @@ export const getMatches = (user) => (dispatch) => {
     })
 }
 
-export const postMatches = async (subscription, payload) => {
-    console.log('[subscription]', subscription);
+export const postMatches = async (payload) => {
     let accessToken = window.localStorage.getItem("accessToken");
     let apiRes;
-    return await axios.post(SERVER_URI + `/app/v1/ipl/match/${subscription}`, payload, { headers: { "Authorization": "Bearer " + accessToken } })
+    return await axios.post(SERVER_URI + `/app/v1/ipl/match`, payload, { headers: { "Authorization": "Bearer " + accessToken } })
         .then(res => { return res })
         .catch(err => { return err.response })
 }
