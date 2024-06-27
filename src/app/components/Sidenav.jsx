@@ -1,9 +1,10 @@
 import { styled } from '@mui/system';
 import { MatxVerticalNav } from 'app/components';
 import useSettings from 'app/hooks/useSettings';
-import { navigations } from 'app/navigations';
+// import { navigations } from 'app/navigations';
 import { Fragment } from 'react';
 import Scrollbar from 'react-perfect-scrollbar';
+import { useSelector } from 'react-redux';
 
 const StyledScrollBar = styled(Scrollbar)(() => ({
   paddingLeft: '1rem',
@@ -41,7 +42,7 @@ const Sidenav = ({ children }) => {
       },
     });
   };
-
+  let navigations = useSelector(({ navigations }) => navigations)
   return (
     <Fragment>
       <StyledScrollBar options={{ suppressScrollX: true }}>

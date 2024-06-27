@@ -46,7 +46,7 @@ const ForgotPassword = () => {
         <Grid container>
           <Grid item xs={12}>
             <JustifyBox p={4}>
-              <Image width="300" src="/assets/images/logos/Indian_Premier_League_Official_Logo.svg.png" alt="" />
+              <Image width="300" src="/assets/images/logos/Default_Create_betting_logo_for_SatteBaaz_with_female_models_0_97769e27-a07c-48cb-bc4c-324106ebe239_0.png" alt="" />
             </JustifyBox>
 
             <ContentBox>

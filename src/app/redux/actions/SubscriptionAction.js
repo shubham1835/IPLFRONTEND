@@ -17,7 +17,7 @@ export const getSubscriptions = (userName) => (dispatch) => {
 export const addSubscription = async (payload) => {
     let accessToken = window.localStorage.getItem("accessToken");
     let apiRes;
-    return await axios.post(SERVER_URI + '/app/v1/subscription/createSubscription', payload, { headers: { "Authorization": "Bearer " + accessToken } })
+    return await axios.post(SERVER_URI + '/app/v1/subscription', payload, { headers: { "Authorization": "Bearer " + accessToken } })
         .then(res => { return res })
         .catch(err => { return err.response })
 }

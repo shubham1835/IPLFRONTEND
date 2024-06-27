@@ -10,7 +10,9 @@ import {
   TableHead,
   TableRow,
   useTheme,
+  Button
 } from '@mui/material';
+import Stack from '@mui/material/Stack';
 import { Paragraph } from 'app/components/Typography';
 import { useDispatch, useSelector } from 'react-redux';
 import { getBidList } from 'app/redux/actions/BidAction';
@@ -60,8 +62,9 @@ const TopSellingTable = () => {
   const [bidListToBeShowed, setBidList] = React.useState([]);
   const [checked, setChecked] = React.useState(false);
   const { user } = useAuth();
+  const subscriptions = user.subscriptions;
   useEffect(() => {
-    dispatch(getBidList(user.userName))
+    dispatch(getBidList(user.userName, subscriptions[0]))
   }, []);
   const bidList = useSelector((state) => state.bidReducer.userBids);
   const result = bidList && bidList.filter((bid) => bid.finalAmount == 0);
@@ -76,10 +79,18 @@ const TopSellingTable = () => {
       setBidList(result);
     setChecked(event.target.checked);
   };
+  const callBidList = (subscription) => {
+    dispatch(getBidList(user.userName, subscription))
+    console.log('subscriptions=====', subscription);
+  }
   return (
     <Card elevation={3} sx={{ pt: '20px', mb: 3 }}>
       <CardHeader>
         <Title>Bid History</Title>
+        <Stack sx={{ ml: 1 }} direction="row" spacing={1}>
+          {subscriptions && subscriptions.map(element => <Button size="small" onClick={() => callBidList(element)} variant="contained" >{element}</Button>
+          )}
+        </Stack>
         <div>
           Show All Matches <Switch
             color="primary"

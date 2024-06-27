@@ -8,6 +8,17 @@ import { margin } from '@mui/system';
 import useAuth from 'app/hooks/useAuth';
 import { getTeams, postMatches } from 'app/redux/actions/IplAction';
 import { useDispatch, useSelector } from 'react-redux';
+import { makeStyles } from '@mui/styles'
+
+const useStyles = makeStyles(({ palette, ...theme }) => ({
+    buttonProgress: {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        marginTop: -12,
+        marginLeft: -12,
+    },
+}))
 
 const CreateMatch = ({ open, handleDialogClose, matchId }) => {
 
@@ -18,6 +29,7 @@ const CreateMatch = ({ open, handleDialogClose, matchId }) => {
     const [subscription, setSubscription] = React.useState("");
     const [homeTeam, setHomeTeam] = React.useState("");
     const [opponentTeamList, setOpponentTeamList] = React.useState("");
+    const classes = useStyles()
 
     useEffect(() => {
         dispatch(getTeams(subscription))
@@ -76,6 +88,7 @@ const CreateMatch = ({ open, handleDialogClose, matchId }) => {
 
 
     const handleSubmit = async (values, { setSubmitting }) => {
+        setLoading(true)
         const date = new Date(values.matchDate + ' ' + values.matchTime);
         const payload = {
             homeTeam: homeTeam,
@@ -86,9 +99,8 @@ const CreateMatch = ({ open, handleDialogClose, matchId }) => {
         }
         const response = await postMatches(payload);
         setSubmitting(false);
-        if (values) {
-            setLoading(true)
-        }
+        setLoading(false)
+        handleDialogClose(false)
     };
 
     return (
@@ -230,6 +242,14 @@ const CreateMatch = ({ open, handleDialogClose, matchId }) => {
                                     Cancel
                                 </Button>
                                 <Button type="submit" style={{ float: "right" }} variant="contained" color="primary" disabled={isSubmitting}>
+                                    {loading && (
+                                        <CircularProgress
+                                            size={24}
+                                            className={
+                                                classes.buttonProgress
+                                            }
+                                        />
+                                    )}
                                     Submit
                                 </Button>
                             </Box>

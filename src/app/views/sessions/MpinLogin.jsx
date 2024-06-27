@@ -50,6 +50,9 @@ const validationSchema = Yup.object().shape({
 });
 
 const MpinLogin = () => {
+  let firebaseToken = window.localStorage.getItem("firebaseToken");
+  console.log('firebaseToken======', firebaseToken);
+  //cbxfenVsnhBPBdqdMmkRLz:APA91bHlrEByt8hJ_3up778faoZ4XlsSpuXofvxuE-Qmto01LNl6QW9gDxRNp2yq3G8_XJLWNU9PpWoifdJz2Q6to0PlP6cjdqtz8Sl6Jj5-vgA0hjgogCfwdYj8wgkRf7R8oHlCwr6G
   const inputsRef = useRef(new Array(6).fill(null));
   const theme = useTheme();
   const navigate = useNavigate();
@@ -116,10 +119,9 @@ const MpinLogin = () => {
         <Grid container>
           <Grid item sm={6} xs={12}>
             <JustifyBox p={4} height="100%" sx={{ minWidth: 320 }}>
-              <img src="/assets/images/logos/Indian_Premier_League_Official_Logo.svg.png" width="100%" alt="" />
+              <img src="/assets/images/logos/Default_Create_betting_logo_for_SatteBaaz_with_female_models_0_97769e27-a07c-48cb-bc4c-324106ebe239_0.png" width="100%" alt="" />
             </JustifyBox>
           </Grid>
-
           <Grid item sm={6} xs={12}>
             <ContentBox>
               <Box sx={{ display: 'flex', flexDirection: 'row' }}>

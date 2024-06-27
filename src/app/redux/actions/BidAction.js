@@ -24,9 +24,9 @@ export const callResult = async (matchId, winner) => {
         .catch(err => { return err.response })
 }
 
-export const getBidList = (user) => (dispatch) => {
+export const getBidList = (user, subscription) => (dispatch) => {
     let accessToken = window.localStorage.getItem("accessToken");
-    axios.get(`${SERVER_URI}/app/v1/ipl/bid/${user}`, { headers: { "Authorization": "Bearer " + accessToken } }).then((res) => {
+    axios.get(`${SERVER_URI}/app/v1/ipl/bid/${user}/${subscription}`, { headers: { "Authorization": "Bearer " + accessToken } }).then((res) => {
         dispatch({
             type: USER_BID_DATA,
             payload: res.data,

@@ -27,7 +27,7 @@ export const navigations = [
     },
     {
         name: 'Add User',
-        path: '/addUser',
+        path: '/employee/new-employee',
         icon: 'personAdd',
         auth: authRoles.admin
     },

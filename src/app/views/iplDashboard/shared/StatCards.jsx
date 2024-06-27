@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getMatches } from 'app/redux/actions/IplAction';
 import ViewBid from './ViewBid';
 import CreateMatch from './CreateMatch';
+import { toMilliSecond } from 'app/utils/utils';
 
 const StyledCard = styled(Card)(({ theme }) => ({
   display: 'flex',
@@ -108,7 +109,7 @@ const StatCards = () => {
 
   const formatDate = (date) => {
     var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    var dateToBeFormatted = new Date(date);
+    var dateToBeFormatted = new Date(toMilliSecond(date));
     return `${dateToBeFormatted.toLocaleDateString("hi-IN", options)}, ${dateToBeFormatted.toLocaleTimeString("hi-IN")}`
   }
 
@@ -117,13 +118,13 @@ const StatCards = () => {
   }
   const bidTimeCheck = (item) => {
     const date = new Date();
-    const lastBidTime = new Date(item.lastBidTime);
+    const lastBidTime = new Date(toMilliSecond(item.lastBidTime));
     return date < lastBidTime;
   }
 
   const viewBidCheck = (item) => {
     const date = new Date();
-    const lastBidTime = new Date(item.lastBidTime);
+    const lastBidTime = new Date(toMilliSecond(item.lastBidTime));
     lastBidTime.setHours(lastBidTime.getHours() - 2)
     return date < lastBidTime;
   }
@@ -216,7 +217,7 @@ const StatCards = () => {
         onChange={handleSwitchChange}
         inputProps={{ 'aria-label': 'controlled' }}
       />
-      {user.role == 'EDITOR' && <div>
+      {user.role == 'SA' && <div>
         <Button sx={{ m: 1 }} variant="contained" onClick={() => setMatchViewOpen(true)} color="primary">
           Create Match
         </Button>
@@ -227,7 +228,7 @@ const StatCards = () => {
             <StyledCard elevation={6}>
               <ContentBox>
                 {item.bidDone && <Icon sx={{ color: green[500] }}>check_circle</Icon>}
-                <img style={{ width: '20%', height: '20%' }} src="/assets/images/logos/Indian_Premier_League_Official_Logo.svg.png" alt="" />
+                <img style={{ width: '20%', height: '20%' }} src="/assets/images/logos/Default_Create_betting_logo_for_SatteBaaz_with_female_models_0_97769e27-a07c-48cb-bc4c-324106ebe239_0.png" alt="" />
                 <Box ml="12px">
                   <H6>{item.match}</H6>
                   <Heading>Match Time: {formatDate(item.date)}</Heading>
@@ -253,7 +254,7 @@ const StatCards = () => {
         ></ViewBid>
         <CreateMatch
           open={matchViewOpen}
-          handleDialogClose={() => setMatchViewOpen(false)}
+          handleDialogClose={setMatchViewOpen}
           subscriptions={subscriptions}></CreateMatch>
       </Grid>
       <Dialog

@@ -171,3 +171,17 @@ export const flat = (array) => {
   });
   return result;
 };
+
+export const toMilliSecond = (epochTimeSeconds) => {
+  const isMilliseconds = epochTimeSeconds > 9999999999; // If the time is greater than 9999999999, it's likely in milliseconds
+
+  let epochTimeMillis;
+  if (isMilliseconds) {
+    // Epoch time is already in milliseconds
+    epochTimeMillis = epochTimeSeconds;
+  } else {
+    // Convert epoch time to milliseconds
+    epochTimeMillis = epochTimeSeconds * 1000;
+  }
+  return epochTimeMillis;
+}

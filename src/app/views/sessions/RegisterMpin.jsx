@@ -126,7 +126,7 @@ const MpinRegister = () => {
         <Grid container>
           <Grid item sm={6} xs={12}>
             <JustifyBox p={4} height="100%" sx={{ minWidth: 320 }}>
-              <img src="/assets/images/logos/Indian_Premier_League_Official_Logo.svg.png" width="100%" alt="" />
+              <img src="/assets/images/logos/Default_Create_betting_logo_for_SatteBaaz_with_female_models_0_97769e27-a07c-48cb-bc4c-324106ebe239_0.png" width="100%" alt="" />
             </JustifyBox>
           </Grid>
 

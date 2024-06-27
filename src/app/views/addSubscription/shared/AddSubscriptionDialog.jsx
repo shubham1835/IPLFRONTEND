@@ -4,19 +4,20 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
+import useAuth from 'app/hooks/useAuth';
 import { addSubscription } from 'app/redux/actions/SubscriptionAction';
-
 const AddSubscriptionDialog = ({ open, handleDialogClose, matchId }) => {
 
     const [loading, setLoading] = React.useState(false);
     const [value, setValue] = React.useState("");
+    const { logout, user } = useAuth();
 
     const initialValues = {
         groupName: '',
-        startDate: '',
-        endDate: '',
-        groupStatus: '',
-        groupDescription: ''
+        startTime: '',
+        endTime: '',
+        subscriptionStatus: '',
+        details: ''
     };
 
     const validate = values => {
@@ -26,22 +27,22 @@ const AddSubscriptionDialog = ({ open, handleDialogClose, matchId }) => {
             errors.groupName = 'Group name is required';
         }
 
-        if (!values.startDate) {
-            errors.startDate = 'Start date is required';
+        if (!values.startTime) {
+            errors.startTime = 'Start date is required';
         }
 
-        if (!values.endDate) {
-            errors.endDate = 'End date is required';
-        } else if (values.startDate && values.endDate < values.startDate) {
-            errors.endDate = 'End date cannot be before start date';
+        if (!values.endTime) {
+            errors.endTime = 'End date is required';
+        } else if (values.startTime && values.endTime < values.startTime) {
+            errors.endTime = 'End date cannot be before start date';
         }
 
-        if (!values.groupStatus) {
-            errors.groupStatus = 'Group status is required';
+        if (!values.subscriptionStatus) {
+            errors.subscriptionStatus = 'Group status is required';
         }
 
-        if (!values.groupDescription) {
-            errors.groupDescription = 'Group description is required';
+        if (!values.details) {
+            errors.details = 'Group description is required';
         }
 
         return errors;
@@ -50,10 +51,11 @@ const AddSubscriptionDialog = ({ open, handleDialogClose, matchId }) => {
     const handleSubmit = async (values, { setSubmitting }) => {
         const payload = {
             groupName: values?.groupName,
-            startDate: Date.parse(values?.startDate),
-            endDate: Date.parse(values?.endDate),
-            groupStatus: values?.groupStatus,
-            groupDescription: values?.groupDescription
+            startTime: Date.parse(values?.startTime),
+            endTime: Date.parse(values?.endTime),
+            subscriptionStatus: values?.subscriptionStatus,
+            details: values?.details,
+            groupAdmin: user.userName
         }
         setSubmitting(false);
         if (values) {
@@ -67,6 +69,7 @@ const AddSubscriptionDialog = ({ open, handleDialogClose, matchId }) => {
                 setLoading(false)
             }
         }
+        handleDialogClose(false)
     };
 
     return (
@@ -101,58 +104,58 @@ const AddSubscriptionDialog = ({ open, handleDialogClose, matchId }) => {
                             <Box mb={2}>
                                 <Field
                                     as={TextField}
-                                    name="startDate"
+                                    name="startTime"
                                     label="Start Date"
                                     type="date"
                                     fullWidth
                                     InputLabelProps={{ shrink: true }}
-                                    error={touched.startDate && Boolean(errors.startDate)}
-                                    helperText={<ErrorMessage name="startDate" />}
+                                    error={touched.startTime && Boolean(errors.startTime)}
+                                    helperText={<ErrorMessage name="startTime" />}
                                 />
                             </Box>
                             <Box mb={2}>
                                 <Field
                                     as={TextField}
-                                    name="endDate"
+                                    name="endTime"
                                     label="End Date"
                                     type="date"
                                     fullWidth
                                     InputProps={{
-                                        min: values.startDate
+                                        min: values.startTime
                                     }}
-                                    disabled={!values.startDate}
+                                    disabled={!values.startTime}
                                     InputLabelProps={{ shrink: true }}
-                                    error={touched.endDate && Boolean(errors.endDate)}
-                                    helperText={<ErrorMessage name="endDate" />}
+                                    error={touched.endTime && Boolean(errors.endTime)}
+                                    helperText={<ErrorMessage name="endTime" />}
                                 />
                             </Box>
                             <Box mb={2}>
                                 <Field
                                     as={TextField}
-                                    name="groupStatus"
+                                    name="subscriptionStatus"
                                     label="Group Status"
                                     select
                                     fullWidth
-                                    error={touched.groupStatus && Boolean(errors.groupStatus)}
-                                    helperText={<ErrorMessage name="groupStatus" />}
+                                    error={touched.subscriptionStatus && Boolean(errors.subscriptionStatus)}
+                                    helperText={<ErrorMessage name="subscriptionStatus" />}
                                 >
                                     <MenuItem value="">
                                         <em>Select status</em>
                                     </MenuItem>
-                                    <MenuItem value="active">Active</MenuItem>
-                                    <MenuItem value="inactive">Inactive</MenuItem>
+                                    <MenuItem value="open">Open</MenuItem>
+                                    <MenuItem value="closed">Closed</MenuItem>
                                 </Field>
                             </Box>
                             <Box mb={2}>
                                 <Field
                                     as={TextField}
-                                    name="groupDescription"
+                                    name="details"
                                     label="Group Description"
                                     multiline
                                     rows={4}
                                     fullWidth
-                                    error={touched.groupDescription && Boolean(errors.groupDescription)}
-                                    helperText={<ErrorMessage name="groupDescription" />}
+                                    error={touched.details && Boolean(errors.details)}
+                                    helperText={<ErrorMessage name="details" />}
                                 />
                             </Box>
                             <Box>
