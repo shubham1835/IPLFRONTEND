@@ -4,7 +4,6 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
-import { margin } from '@mui/system';
 import useAuth from 'app/hooks/useAuth';
 import { getTeams, postMatches } from 'app/redux/actions/IplAction';
 import { useDispatch, useSelector } from 'react-redux';
@@ -238,7 +237,7 @@ const CreateMatch = ({ open, handleDialogClose, matchId }) => {
                                 />
                             </Box>
                             <Box>
-                                <Button onClick={handleDialogClose} style={{ color: "blue" }} color="secondary">
+                                <Button onClick={() => handleDialogClose(false)} style={{ color: "blue" }} color="secondary">
                                     Cancel
                                 </Button>
                                 <Button type="submit" style={{ float: "right" }} variant="contained" color="primary" disabled={isSubmitting}>

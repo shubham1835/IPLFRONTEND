@@ -67,11 +67,10 @@ const TopSellingTable = () => {
     dispatch(getBidList(user.userName, subscriptions[0]))
   }, []);
   const bidList = useSelector((state) => state.bidReducer.userBids);
-  const result = bidList && bidList.filter((bid) => bid.finalAmount == 0);
+  const result = bidList && bidList.filter((bid) => (bid.finalAmount == 0));
   useEffect(() => {
     setBidList(result)
   }, [bidList]);
-
   const handleSwitchChange = (event) => {
     if (event.target.checked)
       setBidList(bidList)
