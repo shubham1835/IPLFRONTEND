@@ -37,5 +37,6 @@ const app = initializeApp(firebaseConfig);
 // Messaging service
 export const messaging = getMessaging(app);
 
-export const SERVER_URI = 'https://merchant-middleware-1-0-6.onrender.com';
+export const SERVER_URI = 'https://merchant-middleware.onrender.com';
+// export const SERVER_URI = 'https://merchant-middleware-1-0-6.onrender.com';
 // export const SERVER_URI = 'http://127.0.0.1:8083';
