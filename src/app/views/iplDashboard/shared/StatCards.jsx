@@ -84,7 +84,7 @@ const StatCards = () => {
   const [dialogItem, setDialogItem] = React.useState({});
   const [value, setValue] = React.useState("");
   const [matchListToBeShowed, setMatchList] = React.useState([]);
-  const [inputValue, setInputValue] = React.useState(30);
+  const [inputValue, setInputValue] = React.useState(0);
   const [bidResponse, setBidResponse] = React.useState("");
   const { logout, user } = useAuth();
   const [checked, setChecked] = React.useState(false);
@@ -176,7 +176,8 @@ const StatCards = () => {
     setResultOpen(false)
   }
   const handleBidOpen = (item) => {
-    setDialogItem(item)
+    setInputValue(item.minBid);
+    setDialogItem(item);
     handleClickOpen();
   }
   const handleViewBidClose = () => {
@@ -195,6 +196,7 @@ const StatCards = () => {
   const result = matchList && matchList.filter((match) => match.winner == null);
   useEffect(() => {
     setMatchList(result)
+
   }, [matchList]);
 
   const handleSwitchChange = (event) => {
@@ -233,9 +235,9 @@ const StatCards = () => {
                   <H6>{item.match}</H6>
                   <Heading>Match Time: {formatDate(item.date)}</Heading>
                   <Heading>Last Bid Time: {formatDate(item.lastBidTime)}</Heading>
-                  <StyledButton onClick={() => handleBidOpen(item)} className="yesBtn" variant="outlined" color="primary">
+                  {bidTimeCheck(item) && <StyledButton onClick={() => handleBidOpen(item)} className="yesBtn" variant="outlined" color="primary">
                     Bid
-                  </StyledButton>
+                  </StyledButton>}
                   {!viewBidCheck(item) && <StyledButton onClick={() => handleViewBidOpen(item)} className="yesBtn" variant="outlined" color="primary">
                     View Bid
                   </StyledButton>}
