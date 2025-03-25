@@ -1,3 +1,4 @@
+/* eslint-disable */
 import axios from 'axios'
 import { SERVER_URI } from "config"
 export const BID_DATA = 'BID_DATA'

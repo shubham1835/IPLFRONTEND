@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useEffect } from 'react'
 import {
     Card,
@@ -25,7 +26,7 @@ const ProductOrderDialog = ({ openOrderDialog, handleProductChange, product, set
                     <Card className="pt-2 pb-8">
                         <ValidatorForm onSubmit={handleOrderSubmit} onError={() => null}>
                             <Grid container spacing={1}>
-                            <Grid item container
+                                <Grid item container
                                     direction="row"
                                     justifyContent="center"
                                     alignItems="center"

@@ -2,7 +2,6 @@
 import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
 import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import { withStyles } from '@mui/styles';
 
@@ -37,10 +36,11 @@ export const FiCardMedia = withStyles({
   }
 })(CardMedia);
 
-// --- Exports --- //
-export default {
+const defaultExport = {
   FiCard,
   FiCardActionArea,
   FiCardActions,
   FiCardMedia
-};
+}
+// --- Exports --- //
+export default defaultExport;

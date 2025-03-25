@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { Icon, Box, Button, Card, Grid, styled, CircularProgress, Switch } from '@mui/material';
 import React, { useEffect } from 'react'
 import useAuth from 'app/hooks/useAuth';

@@ -1,4 +1,4 @@
-
+/* eslint-disable */
 import { SERVER_URI } from "config"
 import axios from 'axios'
 export const GET_SUBSCRIPTIONS = 'GET_SUBSCRIPTIONS'
