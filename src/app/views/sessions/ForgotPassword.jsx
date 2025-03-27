@@ -1,16 +1,15 @@
 import { Box, Button, Card, Grid, styled, TextField } from '@mui/material';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useAuth from 'app/hooks/useAuth';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 
 const FlexBox = styled(Box)(() => ({
   display: 'flex',
   alignItems: 'center',
-}));
-
-const Image = styled('img')(() => ({
-  display: 'block',
-  margin: '0 auto',
-  width: '700px',
 }));
 
 const JustifyBox = styled(FlexBox)(() => ({
@@ -34,35 +33,58 @@ const ForgotPasswordRoot = styled(JustifyBox)(() => ({
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('admin@example.com');
+  const { forgotPassword } = useAuth();
+  const [userId, setUserId] = useState('');
+  const [dialogEvent, setDialogEvent] = useState(false);
 
   const handleFormSubmit = () => {
-    console.log(email);
+    forgotPassword(userId);
+    setDialogEvent(true)
   };
+
+  const emailSentDailog = () => {
+    return (
+      <Dialog open={dialogEvent} fullWidth
+        maxWidth={'sm'} aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title">Forgot Password</DialogTitle>
+        <DialogContent>
+          <h4>{`Email sent to your registered mail Id, password reset link is valid for next 10 min.`}</h4>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => navigate('/session/signin')} color="primary">
+            Ok
+          </Button>
+        </DialogActions>
+      </Dialog>
+    )
+  }
 
   return (
     <ForgotPasswordRoot>
       <Card className="card">
         <Grid container>
-          <Grid item xs={12}>
-            <JustifyBox p={4}>
-              <Image width="300" src="/assets/images/logos/Default_Create_betting_logo_for_SatteBaaz_with_female_models_0_97769e27-a07c-48cb-bc4c-324106ebe239_0.png" alt="" />
+          {emailSentDailog()}
+          {/* <Grid item xs={12}> */}
+          <Grid item sm={6} xs={12}>
+            <JustifyBox p={4} height="100%" sx={{ minWidth: 320 }}>
+              <img src="/assets/images/logos/Default_Create_betting_logo_for_SatteBaaz_with_female_models_0_97769e27-a07c-48cb-bc4c-324106ebe239_0.png" width="100%" alt="" />
             </JustifyBox>
-
+          </Grid>
+          <Grid item sm={6} xs={12}>
             <ContentBox>
-              <form onSubmit={handleFormSubmit}>
+              <form>
                 <TextField
-                  type="email"
-                  name="email"
+                  type="text"
+                  name="userId"
                   size="small"
-                  label="Email"
-                  value={email}
+                  label="UserId"
+                  value={userId}
                   variant="outlined"
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => setUserId(e.target.value)}
                   sx={{ mb: 3, width: '100%' }}
                 />
 
-                <Button fullWidth variant="contained" color="primary" type="submit">
+                <Button disabled={!userId} onClick={() => handleFormSubmit()} fullWidth variant="contained" color="primary">
                   Reset Password
                 </Button>
 
@@ -78,6 +100,7 @@ const ForgotPassword = () => {
               </form>
             </ContentBox>
           </Grid>
+          {/* </Grid> */}
         </Grid>
       </Card>
     </ForgotPasswordRoot>

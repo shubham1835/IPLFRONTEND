@@ -52,13 +52,14 @@ const JwtLogin = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [errorText, setError] = useState('');
 
   const { login } = useAuth();
 
   const handleFormSubmit = async (values) => {
     setLoading(true);
     try {
-      const user = await login(values.email, values.password);
+      const user = await login(values.email, values.password).catch(exception => setError('Invalid user credentials'));
       console.log("[dashboard]", user);
       if (user.mpinEnabled)
         navigate('/');
@@ -117,7 +118,7 @@ const JwtLogin = () => {
                       error={Boolean(errors.password && touched.password)}
                       sx={{ mb: 1.5 }}
                     />
-
+                    <p>{errorText}</p>
                     <FlexBox justifyContent="space-between">
                       <FlexBox gap={1}>
                         <Checkbox
@@ -131,12 +132,12 @@ const JwtLogin = () => {
                         <Paragraph>Remember Me</Paragraph>
                       </FlexBox>
 
-                      {/* <NavLink
+                      <NavLink
                         to="/session/forgot-password"
                         style={{ color: theme.palette.primary.main }}
                       >
                         Forgot password?
-                      </NavLink> */}
+                      </NavLink>
                     </FlexBox>
 
                     <LoadingButton

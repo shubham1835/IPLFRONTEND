@@ -88,6 +88,9 @@ const AuthContext = createContext({
     mpinRegister: () => Promise.resolve(),
     updateMerchant: () => Promise.resolve(),
     registerEmployee: () => Promise.resolve(),
+    forgotPassword: () => Promise.resolve(),
+    validateToken: () => Promise.resolve(),
+    resetPassword: () => Promise.resolve(),
 })
 
 export const AuthProvider = ({ children }) => {
@@ -178,6 +181,37 @@ export const AuthProvider = ({ children }) => {
             },
         })
         return user;
+    }
+    const forgotPassword = async (userId) => {
+        let accessToken = window.localStorage.getItem("accessToken");
+        if (!isValidToken(accessToken)) {
+            accessToken = await getAuthToken();
+        }
+        console.log('userId----->', userId);
+        await axios.post(URI + '/app/v1/employee/forgotPassword', {}, { params: { userId }, headers: { "Authorization": "Bearer " + accessToken, "Content-Type": "application/json" } })
+        setSession(accessToken)
+    }
+    const validateToken = async (userId, token) => {
+        let accessToken = window.localStorage.getItem("accessToken");
+        if (!isValidToken(accessToken)) {
+            accessToken = await getAuthToken();
+        }
+        console.log('userId----->', userId);
+        const response = await axios.post(URI + '/app/v1/employee/validateToken', {
+            userId,
+            token,
+        }, { headers: { "Authorization": "Bearer " + accessToken, "Content-Type": "application/json" } })
+        setSession(accessToken)
+        return response.data;
+    }
+    const resetPassword = async (payload) => {
+        let accessToken = window.localStorage.getItem("accessToken");
+        if (!isValidToken(accessToken)) {
+            accessToken = await getAuthToken();
+        }
+        const response = await axios.post(URI + '/app/v1/employee/resetPassword', payload, { headers: { "Authorization": "Bearer " + accessToken, "Content-Type": "application/json" } })
+        setSession(accessToken)
+        return response;
     }
     const updateMerchant = async (body) => {
         let accessToken = window.localStorage.getItem("accessToken");
@@ -284,7 +318,10 @@ export const AuthProvider = ({ children }) => {
                 register,
                 updateMerchant,
                 registerEmployee,
-                mpinRegister
+                mpinRegister,
+                forgotPassword,
+                validateToken,
+                resetPassword
             }}
         >
             {children}
