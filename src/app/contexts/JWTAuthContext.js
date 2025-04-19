@@ -97,6 +97,8 @@ export const AuthProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState)
     const navigate = useNavigate();
     const dispatcher = useDispatch();
+    let firebaseToken = window.localStorage.getItem("firebaseToken");
+    console.log('firebaseToken======', firebaseToken);
     const login = async (userName, password) => {
         let accessToken = window.localStorage.getItem("accessToken");
 
@@ -107,6 +109,7 @@ export const AuthProvider = ({ children }) => {
         const response = await axios.post(URI + '/app/v1/employee/login', {
             userName,
             password,
+            firebaseToken
         }, { headers: { "Authorization": "Bearer " + accessToken, "Content-Type": "application/json" } })
         const user = response.data
         const navigationState = {}
@@ -123,6 +126,7 @@ export const AuthProvider = ({ children }) => {
         if (user.mpinEnabled)
             window.localStorage.setItem('isMpinLoginEnabled', true)
         window.localStorage.setItem('userName', userName)
+        localStorage.setItem('accessToken', user.token)
         // window.localStorage.setItem('user', JSON.stringify(user))
         return user;
     }
@@ -166,6 +170,7 @@ export const AuthProvider = ({ children }) => {
         const response = await axios.post(URI + '/app/v1/employee/mPinLogin', {
             userName,
             otp,
+            firebaseToken
         }, { headers: { "Authorization": "Bearer " + accessToken, "Content-Type": "application/json" } })
         const user = response.data
         const navigationState = {}
@@ -180,6 +185,7 @@ export const AuthProvider = ({ children }) => {
                 user,
             },
         })
+        localStorage.setItem('accessToken', user.token)
         return user;
     }
     const forgotPassword = async (userId) => {

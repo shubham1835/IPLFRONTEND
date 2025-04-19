@@ -51,8 +51,6 @@ const validationSchema = Yup.object().shape({
 });
 
 const MpinLogin = () => {
-  let firebaseToken = window.localStorage.getItem("firebaseToken");
-  console.log('firebaseToken======', firebaseToken);
   //cbxfenVsnhBPBdqdMmkRLz:APA91bHlrEByt8hJ_3up778faoZ4XlsSpuXofvxuE-Qmto01LNl6QW9gDxRNp2yq3G8_XJLWNU9PpWoifdJz2Q6to0PlP6cjdqtz8Sl6Jj5-vgA0hjgogCfwdYj8wgkRf7R8oHlCwr6G
   const inputsRef = useRef(new Array(6).fill(null));
   const theme = useTheme();
