@@ -32,7 +32,9 @@ const CreateMatch = ({ open, handleDialogClose, matchId }) => {
     const classes = useStyles()
 
     useEffect(() => {
-        dispatch(getTeams(subscription))
+        if (subscription) {
+            dispatch(getTeams(subscription))
+        }
     }, [subscription]);
 
     useEffect(() => {
