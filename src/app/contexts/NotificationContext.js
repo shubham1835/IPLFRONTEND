@@ -28,7 +28,7 @@ export const NotificationProvider = ({ children }) => {
     const deleteNotification = async (notificationID) => {
         try {
             const res = await axios.post('/api/notification/delete', { id: notificationID });
-            dispatch({ type: 'DELETE_NOTIFICATION', payload: res.data });
+            dispatch({ type: 'DELETE_NOTIFICATION', payload: Array.isArray(res.data) ? res.data : [] });
         } catch (e) {
             console.error(e);
         }
@@ -37,7 +37,7 @@ export const NotificationProvider = ({ children }) => {
     const clearNotifications = async () => {
         try {
             const res = await axios.post('/api/notification/delete-all');
-            dispatch({ type: 'CLEAR_NOTIFICATIONS', payload: res.data });
+            dispatch({ type: 'CLEAR_NOTIFICATIONS', payload: Array.isArray(res.data) ? res.data : [] });
         } catch (e) {
             console.error(e);
         }
@@ -46,16 +46,17 @@ export const NotificationProvider = ({ children }) => {
     const getNotifications = async () => {
         try {
             const res = await axios.get('/api/notification');
-            dispatch({ type: 'LOAD_NOTIFICATIONS', payload: res.data });
+            dispatch({ type: 'LOAD_NOTIFICATIONS', payload: Array.isArray(res.data) ? res.data : [] });
         } catch (e) {
             console.error(e);
+            dispatch({ type: 'LOAD_NOTIFICATIONS', payload: [] });
         }
     };
 
     const createNotification = async (notification) => {
         try {
             const res = await axios.post('/api/notification/add', { notification });
-            dispatch({ type: 'CREATE_NOTIFICATION', payload: res.data });
+            dispatch({ type: 'CREATE_NOTIFICATION', payload: Array.isArray(res.data) ? res.data : [] });
         } catch (e) {
             console.error(e);
         }
