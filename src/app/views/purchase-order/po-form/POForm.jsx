@@ -20,7 +20,6 @@ import { setPOData } from 'app/redux/actions/FormAction'
 import { getStoreList } from 'app/redux/actions/UserAction'
 import { getProductList } from 'app/redux/actions/EcommerceActions'
 import { useEffect } from 'react'
-import history from 'history.js'
 import useAuth from 'app/hooks/useAuth'
 
 const POForm = () => {

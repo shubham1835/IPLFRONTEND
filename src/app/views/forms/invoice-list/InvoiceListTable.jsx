@@ -14,7 +14,6 @@ import { makeStyles } from '@mui/styles'
 import clsx from 'clsx'
 import { Button } from '@mui/material'
 import { useSelector, useDispatch } from 'react-redux'
-import history from 'history.js'
 import { getInvoiceList, GET_INVOICE_DATA } from 'app/redux/actions/FormAction'
 
 const useStyles = makeStyles(({ palette, ...theme }) => ({

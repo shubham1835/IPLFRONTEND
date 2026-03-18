@@ -21,7 +21,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setInvoiceData } from 'app/redux/actions/FormAction'
 import { getStoreList } from 'app/redux/actions/UserAction'
 import { useEffect } from 'react'
-import history from 'history.js'
 import useAuth from 'app/hooks/useAuth'
 
 const InvoiceForm = () => {

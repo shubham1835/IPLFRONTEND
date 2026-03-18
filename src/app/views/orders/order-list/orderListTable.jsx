@@ -17,7 +17,6 @@ import clsx from 'clsx'
 import { Button } from '@mui/material'
 import { useSelector, useDispatch } from 'react-redux'
 import { getStoreList } from 'app/redux/actions/UserAction'
-import history from 'history.js'
 import { MatxMenu, MatxSearchBox } from 'app/components'
 
 const useStyles = makeStyles(({ palette, ...theme }) => ({
