@@ -81,7 +81,7 @@ export const getBrandList = () => (dispatch) => {
 }
 
 export const getCartList = (uid) => (dispatch) => {
-    axios.get('/api/ecommerce/get-cart-list', { data: uid }).then((res) => {
+    axios.get('/api/ecommerce/get-cart-list', { params: { uid } }).then((res) => {
         dispatch({
             type: GET_CART_LIST,
             payload: res.data,

@@ -75,8 +75,6 @@ const ProductDetails = styled('div')(() => ({
   },
 }));
 
-let cartListLoaded = false;
-
 function ShoppingCart({ container }) {
   const [totalCost, setTotalCost] = useState(0);
   const [panelOpen, setPanelOpen] = useState(false);
@@ -88,10 +86,9 @@ function ShoppingCart({ container }) {
   const theme = useTheme();
   const secondary = theme.palette.text.secondary;
 
-  if (!cartListLoaded) {
+  useEffect(() => {
     dispatch(getCartList(user.id));
-    cartListLoaded = true;
-  }
+  }, [user.id]);
 
   const handleDrawerToggle = () => {
     setPanelOpen(!panelOpen);
@@ -106,7 +103,6 @@ function ShoppingCart({ container }) {
 
   useEffect(() => {
     let total = 0;
-
     cartList.forEach((product) => {
       total += product.price * product.amount;
     });
